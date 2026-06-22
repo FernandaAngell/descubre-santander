@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Status {
+  DRAFT
+  PUBLISHED
+}
+
+enum Difficulty {
+  EASY
+  MODERATE
+  HARD
+}
+
+enum AccommodationType {
+  GLAMPING
+  HOTEL
+  CABANA
+  HOSTAL
+}
+
+enum IdealFor {
+  PAREJAS
+  FAMILIAS
+  GRUPOS
+  TODOS
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  image     String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reviews   Review[]
+  favorites Favorite[]
+
+  @@map("users")
+}
+
+model Municipality {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+  coverImage  String?
+  altitude    Int?
+  weather     String?
+  population  Int?
+  department  String  @default("Santander")
+  latitude    Float
+  longitude   Float
+
+  places         Place[]
+  accommodations Accommodation[]
+  restaurants    Restaurant[]
+
+  @@map("municipalities")
+}
+
+model Category {
+  id    String @id @default(cuid())
+  name  String
+  slug  String @unique
+  icon  String
+  color String
+
+  places Place[]
+
+  @@map("categories")
+}
+
+model Place {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  description String
+  images      String[]
+  tips        String[]
+  bestTime    String?
+  difficulty  Difficulty?
+  entryFee    Float?
+  address     String?
+  latitude    Float
+  longitude   Float
+  featured    Boolean     @default(false)
+  status      Status      @default(DRAFT)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  municipalityId String
+  categoryId     String
+
+  municipality Municipality @relation(fields: [municipalityId], references: [id])
+  category     Category     @relation(fields: [categoryId], references: [id])
+  reviews      Review[]
+  favorites    Favorite[]
+
+  @@map("places")
+}
+
+model Accommodation {
+  id          String            @id @default(cuid())
+  name        String
+  slug        String            @unique
+  description String
+  type        AccommodationType
+  images      String[]
+  priceMin    Float
+  priceMax    Float
+  amenities   String[]
+  idealFor    IdealFor          @default(TODOS)
+  capacity    Int?
+  checkIn     String?
+  checkOut    String?
+  phone       String?
+  contactUrl  String?
+  address     String?
+  latitude    Float
+  longitude   Float
+  status      Status            @default(DRAFT)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+  reviews        Review[]
+
+  @@map("accommodations")
+}
+
+model Restaurant {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  foodType    String
+  specialties String[]
+  priceAvg    Float
+  rating      Float    @default(0)
+  images      String[]
+  schedule    String?
+  phone       String?
+  address     String?
+  status      Status   @default(DRAFT)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+  reviews        Review[]
+
+  @@map("restaurants")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String
+  photos    String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId          String
+  placeId         String?
+  accommodationId String?
+  restaurantId    String?
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  place         Place?         @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  accommodation Accommodation? @relation(fields: [accommodationId], references: [id], onDelete: Cascade)
+  restaurant    Restaurant?    @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  userId  String
+  placeId String
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  place Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, placeId])
+  @@map("favorites")
+}
