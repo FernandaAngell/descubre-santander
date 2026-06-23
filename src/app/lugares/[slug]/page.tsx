@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
-import { MapPin, Clock, DollarSign, AlertTriangle, Lightbulb } from "lucide-react"
+import { MapPin, Lightbulb } from "lucide-react"
 import Link from "next/link"
+import FavoriteButton from "@/components/FavoriteButton"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -48,7 +49,7 @@ export default async function LugarDetailPage({ params }: Props) {
           <span className="text-9xl opacity-20">{place.category.icon}</span>
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 pb-8 w-full">
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-3 mb-3">
             <span
               className="text-xs font-semibold px-3 py-1 rounded-full text-white"
               style={{ backgroundColor: place.category.color }}
@@ -60,6 +61,7 @@ export default async function LugarDetailPage({ params }: Props) {
                 Destacado
               </span>
             )}
+            <FavoriteButton placeId={place.id} />
           </div>
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">
             {place.name}
