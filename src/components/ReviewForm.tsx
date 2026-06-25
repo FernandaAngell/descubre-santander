@@ -22,12 +22,19 @@ export default function ReviewForm({ placeId, accommodationId, restaurantId }: P
 
   if (!session) {
     return (
-      <div className="bg-gray-50 rounded-2xl p-6 text-center">
-        <p className="text-gray-600 mb-4">Inicia sesión para dejar una reseña</p>
-        <a
-          href="/auth/login"
-          className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-6 py-2.5 rounded-xl transition-colors"
-        >
+      <div style={{ background: "#0f2318", borderRadius: "12px", padding: "24px", textAlign: "center", border: "1px solid #1a3d2b" }}>
+        <p style={{ color: "rgba(255,255,255,0.5)", marginBottom: "16px", fontSize: "14px" }}>
+          Inicia sesión para dejar una reseña
+        </p>
+        <a href="/auth/login" style={{
+          background: "#15803d",
+          color: "white",
+          padding: "10px 24px",
+          borderRadius: "10px",
+          textDecoration: "none",
+          fontWeight: 600,
+          fontSize: "14px",
+        }}>
           Iniciar sesión
         </a>
       </div>
@@ -59,19 +66,21 @@ export default function ReviewForm({ placeId, accommodationId, restaurantId }: P
 
   if (success) {
     return (
-      <div className="bg-emerald-50 rounded-2xl p-6 text-center border border-emerald-100">
-        <div className="text-4xl mb-2">🎉</div>
-        <p className="text-emerald-700 font-medium">¡Reseña publicada exitosamente!</p>
+      <div style={{ background: "#0f2318", borderRadius: "12px", padding: "24px", textAlign: "center", border: "1px solid #1a3d2b" }}>
+        <div style={{ fontSize: "32px", marginBottom: "8px" }}>🎉</div>
+        <p style={{ color: "#6ee7b7", fontWeight: 600, margin: 0 }}>¡Reseña publicada exitosamente!</p>
       </div>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
-      <h3 className="font-bold text-gray-900 mb-4">Escribe tu reseña</h3>
+    <form onSubmit={handleSubmit} style={{ background: "#141414", borderRadius: "12px", padding: "24px", border: "1px solid #2a2a2a" }}>
+      <h3 style={{ color: "white", fontSize: "16px", fontWeight: 700, marginBottom: "16px" }}>
+        Escribe tu reseña
+      </h3>
 
       {/* Estrellas */}
-      <div className="flex items-center gap-1 mb-4">
+      <div style={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "16px" }}>
         {[1, 2, 3, 4, 5].map((star) => (
           <button
             key={star}
@@ -79,19 +88,20 @@ export default function ReviewForm({ placeId, accommodationId, restaurantId }: P
             onClick={() => setRating(star)}
             onMouseEnter={() => setHovered(star)}
             onMouseLeave={() => setHovered(0)}
-            className="transition-transform hover:scale-110"
+            style={{ background: "none", border: "none", cursor: "pointer", padding: "2px" }}
           >
             <Star
-              className={`w-8 h-8 transition-colors ${
-                star <= (hovered || rating)
-                  ? "fill-yellow-400 text-yellow-400"
-                  : "text-gray-300"
-              }`}
+              size={28}
+              style={{
+                fill: star <= (hovered || rating) ? "#fbbf24" : "transparent",
+                color: star <= (hovered || rating) ? "#fbbf24" : "rgba(255,255,255,0.2)",
+                transition: "all 0.1s",
+              }}
             />
           </button>
         ))}
         {rating > 0 && (
-          <span className="text-sm text-gray-600 ml-2">
+          <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", marginLeft: "8px" }}>
             {["", "Malo", "Regular", "Bueno", "Muy bueno", "Excelente"][rating]}
           </span>
         )}
@@ -103,13 +113,35 @@ export default function ReviewForm({ placeId, accommodationId, restaurantId }: P
         onChange={(e) => setComment(e.target.value)}
         placeholder="Cuéntanos tu experiencia..."
         rows={3}
-        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white text-sm resize-none mb-4"
+        style={{
+          width: "100%",
+          padding: "12px 14px",
+          background: "#1a1a1a",
+          border: "1px solid #2a2a2a",
+          borderRadius: "10px",
+          color: "white",
+          fontSize: "14px",
+          resize: "none",
+          outline: "none",
+          marginBottom: "14px",
+          boxSizing: "border-box",
+        }}
       />
 
       <button
         type="submit"
         disabled={loading}
-        className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-medium px-6 py-2.5 rounded-xl transition-colors"
+        style={{
+          background: loading ? "#1a3d2b" : "#15803d",
+          color: "white",
+          border: "none",
+          padding: "11px 24px",
+          borderRadius: "10px",
+          fontWeight: 600,
+          fontSize: "14px",
+          cursor: loading ? "not-allowed" : "pointer",
+          transition: "background 0.2s",
+        }}
       >
         {loading ? "Publicando..." : "Publicar reseña"}
       </button>

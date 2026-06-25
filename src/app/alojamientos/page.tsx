@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
-import { MapPin, Users, Phone } from "lucide-react"
+import { MapPin, Users } from "lucide-react"
 import { Accommodation, Municipality } from "@prisma/client"
 
 type AccommodationWithMunicipality = Accommodation & {
@@ -18,19 +18,21 @@ const tipoLabels: Record<string, string> = {
   HOSTAL: "Hostal",
 }
 
-const tipoColors: Record<string, string> = {
-  GLAMPING: "bg-purple-100 text-purple-700",
-  HOTEL: "bg-blue-100 text-blue-700",
-  CABANA: "bg-amber-100 text-amber-700",
-  HOSTAL: "bg-green-100 text-green-700",
-}
-
 const idealForLabels: Record<string, string> = {
   PAREJAS: "Parejas",
   FAMILIAS: "Familias",
   GRUPOS: "Grupos",
   TODOS: "Todos",
 }
+
+const accommodationImages: Record<string, string> = {
+  "hostal-barichara-colonial": "https://res.cloudinary.com/dxalbznya/image/upload/v1782421718/hostal_u1cxeo.jpg",
+  "hotel-ruitoque": "https://res.cloudinary.com/dxalbznya/image/upload/v1782421739/hotel_campestre_ruitoque_qsuubp.jpg",
+  "glamping-la-piramide": "https://res.cloudinary.com/dxalbznya/image/upload/v1782421760/La_Piramide_Parque_1_313f673f13_qawgps.jpg",
+  "glamping-monte-azul": "https://res.cloudinary.com/dxalbznya/image/upload/v1782421776/monte_azul_ngga7n.jpg",
+}
+
+const tipos = ["GLAMPING", "HOTEL", "CABANA", "HOSTAL"]
 
 export default async function AlojamientosPage({ searchParams }: Props) {
   const params = await searchParams
@@ -49,112 +51,120 @@ export default async function AlojamientosPage({ searchParams }: Props) {
     prisma.municipality.findMany({ orderBy: { name: "asc" } }),
   ])
 
-  const tipos = ["GLAMPING", "HOTEL", "CABANA", "HOSTAL"]
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh", paddingTop: "80px" }}>
 
       {/* Header */}
-      <div className="bg-purple-900 text-white py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Alojamientos</h1>
-          <p className="text-purple-200 text-lg">
-            Glampings, hoteles, cabañas y hostales en Santander
-          </p>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 py-10">
+      <div style={{ padding: "60px 24px 48px", maxWidth: "1152px", margin: "0 auto" }}>
+        <p style={{ color: "#6ee7b7", fontSize: "11px", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", marginBottom: "12px" }}>
+          Santander, Colombia
+        </p>
+        <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 6vw, 64px)", fontWeight: 700, color: "#ffffff", margin: "0 0 16px", lineHeight: 1 }}>
+          Alojamientos
+        </h1>
+        <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "16px", margin: "0 0 32px" }}>
+          Glampings, hoteles, cabañas y hostales en Santander
+        </p>
 
         {/* Filtros tipo */}
-        <div className="flex flex-wrap gap-3 mb-8">
-          <Link
-            href="/alojamientos"
-            className={`px-5 py-2 rounded-full font-medium text-sm transition-colors ${
-              !tipo
-                ? "bg-purple-600 text-white"
-                : "bg-white text-gray-600 border border-gray-200 hover:border-purple-300"
-            }`}
-          >
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+          <Link href="/alojamientos" style={{
+            padding: "8px 20px",
+            borderRadius: "20px",
+            fontSize: "13px",
+            fontWeight: 600,
+            textDecoration: "none",
+            background: !tipo ? "#15803d" : "#1a1a1a",
+            color: !tipo ? "white" : "rgba(255,255,255,0.5)",
+            border: !tipo ? "1px solid #15803d" : "1px solid #2a2a2a",
+            transition: "all 0.2s",
+          }}>
             Todos
           </Link>
           {tipos.map((t) => (
-            <Link
-              key={t}
-              href={`/alojamientos?tipo=${t}${municipio ? `&municipio=${municipio}` : ""}`}
-              className={`px-5 py-2 rounded-full font-medium text-sm transition-colors ${
-                tipo === t
-                  ? "bg-purple-600 text-white"
-                  : "bg-white text-gray-600 border border-gray-200 hover:border-purple-300"
-              }`}
-            >
+            <Link key={t} href={`/alojamientos?tipo=${t}${municipio ? `&municipio=${municipio}` : ""}`} style={{
+              padding: "8px 20px",
+              borderRadius: "20px",
+              fontSize: "13px",
+              fontWeight: 600,
+              textDecoration: "none",
+              background: tipo === t ? "#15803d" : "#1a1a1a",
+              color: tipo === t ? "white" : "rgba(255,255,255,0.5)",
+              border: tipo === t ? "1px solid #15803d" : "1px solid #2a2a2a",
+              transition: "all 0.2s",
+            }}>
               {tipoLabels[t]}
             </Link>
           ))}
         </div>
+      </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+      <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px 120px", display: "flex", gap: "40px" }}>
 
-          {/* Sidebar municipios */}
-          <aside className="lg:w-56 shrink-0">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sticky top-24">
-              <div className="font-semibold text-gray-900 mb-4">Municipio</div>
-              <div className="flex flex-col gap-2">
-                <Link
-                  href={tipo ? `/alojamientos?tipo=${tipo}` : "/alojamientos"}
-                  className={`text-sm px-3 py-2 rounded-lg transition-colors ${
-                    !municipio
-                      ? "bg-purple-50 text-purple-700 font-medium"
-                      : "text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  Todos
-                </Link>
-                {municipalities.map((mun) => (
-                  <Link
-                    key={mun.id}
-                    href={`/alojamientos?municipio=${mun.slug}${tipo ? `&tipo=${tipo}` : ""}`}
-                    className={`text-sm px-3 py-2 rounded-lg transition-colors ${
-                      municipio === mun.slug
-                        ? "bg-purple-50 text-purple-700 font-medium"
-                        : "text-gray-600 hover:bg-gray-50"
-                    }`}
-                  >
-                    {mun.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </aside>
-
-          {/* Grid */}
-          <div className="flex-1">
-            <p className="text-gray-500 text-sm mb-6">
-              <span className="font-semibold text-gray-900">{accommodations.length}</span> alojamientos encontrados
+        {/* Sidebar */}
+        <aside style={{ width: "200px", flexShrink: 0 }}>
+          <div style={{ position: "sticky", top: "100px" }}>
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", marginBottom: "12px" }}>
+              Municipio
             </p>
-
-            {accommodations.length === 0 ? (
-              <div className="text-center py-20">
-                <div className="text-5xl mb-4">🏕️</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  No hay alojamientos disponibles
-                </h3>
-                <p className="text-gray-500 mb-6">Intenta con otros filtros</p>
-                <Link
-                  href="/alojamientos"
-                  className="bg-purple-600 hover:bg-purple-700 text-white font-medium px-6 py-3 rounded-xl transition-colors"
-                >
-                  Ver todos
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+              <Link href={tipo ? `/alojamientos?tipo=${tipo}` : "/alojamientos"} style={{
+                padding: "8px 12px",
+                borderRadius: "8px",
+                fontSize: "13px",
+                fontWeight: 500,
+                textDecoration: "none",
+                background: !municipio ? "#1a2e1f" : "transparent",
+                color: !municipio ? "#6ee7b7" : "rgba(255,255,255,0.5)",
+                border: !municipio ? "1px solid #2a4a2e" : "1px solid transparent",
+              }}>
+                Todos
+              </Link>
+              {municipalities.map((mun) => (
+                <Link key={mun.id} href={`/alojamientos?municipio=${mun.slug}${tipo ? `&tipo=${tipo}` : ""}`} style={{
+                  padding: "8px 12px",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  textDecoration: "none",
+                  background: municipio === mun.slug ? "#1a2e1f" : "transparent",
+                  color: municipio === mun.slug ? "#6ee7b7" : "rgba(255,255,255,0.5)",
+                  border: municipio === mun.slug ? "1px solid #2a4a2e" : "1px solid transparent",
+                }}>
+                  {mun.name}
                 </Link>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {accommodations.map((acc) => (
-                  <AccommodationCard key={acc.id} accommodation={acc} />
-                ))}
-              </div>
-            )}
+              ))}
+            </div>
           </div>
+        </aside>
+
+        {/* Grid */}
+        <div style={{ flex: 1 }}>
+          <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "13px", marginBottom: "24px" }}>
+            <span style={{ color: "white", fontWeight: 600 }}>{accommodations.length}</span> alojamientos encontrados
+          </p>
+
+          {accommodations.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "80px 0" }}>
+              <div style={{ fontSize: "48px", marginBottom: "16px" }}>🏕️</div>
+              <h3 style={{ color: "white", fontSize: "20px", fontWeight: 600, marginBottom: "8px" }}>
+                No hay alojamientos disponibles
+              </h3>
+              <p style={{ color: "rgba(255,255,255,0.4)", marginBottom: "24px" }}>Intenta con otros filtros</p>
+              <Link href="/alojamientos" style={{
+                background: "#15803d", color: "white", padding: "12px 24px",
+                borderRadius: "12px", textDecoration: "none", fontWeight: 600, fontSize: "14px",
+              }}>
+                Ver todos
+              </Link>
+            </div>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px" }}>
+              {accommodations.map((acc) => (
+                <AccommodationCard key={acc.id} accommodation={acc} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -162,65 +172,109 @@ export default async function AlojamientosPage({ searchParams }: Props) {
 }
 
 function AccommodationCard({ accommodation: acc }: { accommodation: AccommodationWithMunicipality }) {
+  const accommodationImages: Record<string, string> = {
+    "hostal-barichara-colonial": "https://res.cloudinary.com/dxalbznya/image/upload/v1782421718/hostal_u1cxeo.jpg",
+    "hotel-ruitoque": "https://res.cloudinary.com/dxalbznya/image/upload/v1782421739/hotel_campestre_ruitoque_qsuubp.jpg",
+    "glamping-la-piramide": "https://res.cloudinary.com/dxalbznya/image/upload/v1782421760/La_Piramide_Parque_1_313f673f13_qawgps.jpg",
+    "glamping-monte-azul": "https://res.cloudinary.com/dxalbznya/image/upload/v1782421776/monte_azul_ngga7n.jpg",
+  }
+
+  const tipoLabels: Record<string, string> = {
+    GLAMPING: "Glamping",
+    HOTEL: "Hotel",
+    CABANA: "Cabaña",
+    HOSTAL: "Hostal",
+  }
+
+  const idealForLabels: Record<string, string> = {
+    PAREJAS: "Parejas",
+    FAMILIAS: "Familias",
+    GRUPOS: "Grupos",
+    TODOS: "Todos",
+  }
+
   return (
     <Link
       href={`/alojamientos/${acc.slug}`}
-      className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+      style={{ textDecoration: "none", display: "block", borderRadius: "16px", overflow: "hidden", background: "#1a1a1a", border: "1px solid #2a2a2a" }}
     >
       {/* Imagen */}
-      <div className="h-52 bg-gradient-to-br from-purple-400 to-indigo-600 relative">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-7xl opacity-20">
-            {acc.type === "GLAMPING" ? "⛺" : acc.type === "HOTEL" ? "🏨" : acc.type === "CABANA" ? "🏡" : "🛏️"}
-          </span>
-        </div>
-        <div className="absolute top-3 left-3">
-          <span className={`text-xs font-semibold px-3 py-1 rounded-full ${tipoColors[acc.type]}`}>
+      <div style={{ position: "relative", height: "220px", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: `url('${accommodationImages[acc.slug] || ""}')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundColor: "#1a2e1f",
+          transition: "transform 0.5s ease",
+        }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%)" }} />
+        <div style={{ position: "absolute", top: "12px", left: "12px" }}>
+          <span style={{
+            background: "rgba(255,255,255,0.15)",
+            backdropFilter: "blur(8px)",
+            border: "0.5px solid rgba(255,255,255,0.25)",
+            color: "white",
+            fontSize: "11px",
+            fontWeight: 600,
+            padding: "4px 10px",
+            borderRadius: "20px",
+          }}>
             {tipoLabels[acc.type]}
           </span>
         </div>
-        <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-2">
-          <div className="text-xs text-gray-500">Desde</div>
-          <div className="font-bold text-gray-900">
-            ${acc.priceMin.toLocaleString("es-CO")}
-          </div>
+        <div style={{ position: "absolute", bottom: "12px", right: "12px", background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", borderRadius: "10px", padding: "6px 12px" }}>
+          <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "10px" }}>Desde</div>
+          <div style={{ color: "white", fontWeight: 700, fontSize: "15px" }}>${acc.priceMin.toLocaleString("es-CO")}</div>
         </div>
       </div>
 
-      {/* Contenido */}
-      <div className="p-5">
-        <h3 className="font-bold text-gray-900 text-lg mb-1 group-hover:text-purple-600 transition-colors line-clamp-1">
+      {/* Info */}
+      <div style={{ padding: "20px" }}>
+        <h3 style={{ fontFamily: "var(--font-display)", color: "white", fontSize: "17px", fontWeight: 700, margin: "0 0 6px" }}>
           {acc.name}
         </h3>
-        <div className="flex items-center gap-1 text-gray-500 text-sm mb-3">
-          <MapPin className="w-4 h-4 shrink-0" />
+        <div style={{ display: "flex", alignItems: "center", gap: "4px", color: "rgba(255,255,255,0.4)", fontSize: "12px", marginBottom: "12px" }}>
+          <MapPin size={12} />
           <span>{acc.municipality.name}</span>
         </div>
-        <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed mb-4">
+        <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "13px", lineHeight: 1.6, margin: "0 0 16px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
           {acc.description}
         </p>
-
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-1 text-sm text-gray-600">
-            <Users className="w-4 h-4" />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "14px", borderTop: "1px solid #2a2a2a" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "rgba(255,255,255,0.4)", fontSize: "12px" }}>
+            <Users size={13} />
             <span>Ideal para {idealForLabels[acc.idealFor]}</span>
           </div>
           {acc.capacity && (
-            <span className="text-xs text-gray-500">
+            <span style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px" }}>
               Hasta {acc.capacity} personas
             </span>
           )}
         </div>
-
         {acc.amenities.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-1">
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "12px" }}>
             {acc.amenities.slice(0, 3).map((amenity, i) => (
-              <span key={i} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+              <span key={i} style={{
+                background: "#141414",
+                border: "1px solid #2a2a2a",
+                color: "rgba(255,255,255,0.4)",
+                fontSize: "11px",
+                padding: "3px 10px",
+                borderRadius: "20px",
+              }}>
                 {amenity}
               </span>
             ))}
             {acc.amenities.length > 3 && (
-              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+              <span style={{
+                background: "#141414",
+                border: "1px solid #2a2a2a",
+                color: "rgba(255,255,255,0.4)",
+                fontSize: "11px",
+                padding: "3px 10px",
+                borderRadius: "20px",
+              }}>
                 +{acc.amenities.length - 3} más
               </span>
             )}
