@@ -1,70 +1,181 @@
+"use client"
+
+import { useEffect, useRef } from "react"
 import Link from "next/link"
-import { Search, MapPin } from "lucide-react"
+import { Search, ArrowDown } from "lucide-react"
 
 export default function HeroSection() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    const particles: { x: number; y: number; size: number; speedX: number; speedY: number; opacity: number }[] = []
+
+    for (let i = 0; i < 80; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 0.5,
+        speedX: (Math.random() - 0.5) * 0.3,
+        speedY: (Math.random() - 0.5) * 0.3,
+        opacity: Math.random() * 0.5 + 0.1,
+      })
+    }
+
+    let animId: number
+    function animate() {
+      if (!ctx || !canvas) return
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      particles.forEach((p) => {
+        p.x += p.speedX
+        p.y += p.speedY
+        if (p.x < 0) p.x = canvas.width
+        if (p.x > canvas.width) p.x = 0
+        if (p.y < 0) p.y = canvas.height
+        if (p.y > canvas.height) p.y = 0
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`
+        ctx.fill()
+      })
+      animId = requestAnimationFrame(animate)
+    }
+    animate()
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      cancelAnimationFrame(animId)
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
+
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden -mt-20">
 
-      {/* Patrón de fondo decorativo */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-teal-300 rounded-full blur-3xl" />
-      </div>
+      {/* Fondo con imagen de Barichara */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('https://images.unsplash.com/photo-1733153453347-f80cf175fca5?w=1920&q=80')",
+        }}
+      />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+      {/* Overlay gradiente */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/75" />
+
+      {/* Partículas */}
+      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
+
+      {/* Contenido */}
+      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-20">
 
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm font-medium px-4 py-2 rounded-full mb-6">
-          <MapPin className="w-4 h-4" />
-          <span>Santander, Colombia</span>
+        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs font-medium px-4 py-2 rounded-full mb-8 tracking-widest uppercase">
+          Colombia • Santander
         </div>
 
         {/* Título */}
-        <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-          Descubre la magia de{" "}
-          <span className="text-emerald-300">Santander</span>
+        <h1 className="font-display text-6xl md:text-8xl font-bold text-white mb-6 leading-none tracking-tight">
+          Descubre lo
+          <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-300">
+            extraordinario
+          </span>
         </h1>
 
         {/* Subtítulo */}
-        <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
-          Cascadas, pueblos coloniales, aventura extrema y gastronomía única.
-          Todo lo que necesitas para tu próximo viaje.
+        <p className="text-white/70 text-lg md:text-xl mb-12 max-w-2xl mx-auto font-light leading-relaxed">
+          Cascadas escondidas, pueblos coloniales y aventuras únicas en el corazón de Colombia
         </p>
 
         {/* Buscador */}
-        <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto mb-10">
-          <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="¿Qué quieres descubrir?"
-              className="w-full pl-12 pr-4 py-4 rounded-xl text-gray-800 bg-white shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-base"
-            />
-          </div>
-          <button className="bg-emerald-500 hover:bg-emerald-400 text-white font-semibold px-8 py-4 rounded-xl shadow-lg transition-colors duration-200 whitespace-nowrap">
-            Buscar
-          </button>
-        </div>
+<div style={{
+  display: "flex",
+  maxWidth: "600px",
+  margin: "0 auto 4rem",
+  background: "white",
+  borderRadius: "16px",
+  boxShadow: "0 25px 50px rgba(0,0,0,0.3)",
+  overflow: "hidden",
+}}>
+  <div style={{ flex: 1, position: "relative" }}>
+    <Search style={{
+      position: "absolute",
+      left: "20px",
+      top: "50%",
+      transform: "translateY(-50%)",
+      width: "18px",
+      height: "18px",
+      color: "#9ca3af"
+    }} />
+    <input
+      type="text"
+      placeholder="Busca un destino, municipio o experiencia..."
+      style={{
+        width: "100%",
+        paddingLeft: "52px",
+        paddingRight: "16px",
+        paddingTop: "14px",
+        paddingBottom: "14px",
+        fontSize: "14px",
+        color: "#1f2937",
+        border: "none",
+        outline: "none",
+        background: "transparent",
+      }}
+    />
+  </div>
+  <Link
+    href="/lugares"
+    style={{
+      background: "#15803d",
+      color: "white",
+      fontWeight: "600",
+      padding: "14px 28px",
+      fontSize: "14px",
+      whiteSpace: "nowrap",
+      transition: "background 0.2s",
+      display: "flex",
+      alignItems: "center",
+    }}
+    onMouseEnter={(e) => (e.currentTarget.style.background = "#16a34a")}
+    onMouseLeave={(e) => (e.currentTarget.style.background = "#15803d")}
+  >
+    Explorar
+  </Link>
+</div>
 
         {/* Stats */}
-        <div className="flex flex-wrap justify-center gap-8 text-white/70">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-white">87</div>
-            <div className="text-sm">Municipios</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-white">+200</div>
-            <div className="text-sm">Lugares</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-white">+50</div>
-            <div className="text-sm">Alojamientos</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-white">+30</div>
-            <div className="text-sm">Restaurantes</div>
-          </div>
+        <div className="flex flex-wrap justify-center gap-10">
+          {[
+            { num: "87", label: "Municipios" },
+            { num: "+200", label: "Destinos" },
+            { num: "+50", label: "Alojamientos" },
+            { num: "+30", label: "Restaurantes" },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center">
+              <div className="text-3xl font-bold text-white">{stat.num}</div>
+              <div className="text-white/50 text-xs uppercase tracking-widest mt-1">{stat.label}</div>
+            </div>
+          ))}
         </div>
+      </div>
+
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 animate-bounce">
+        <ArrowDown className="w-5 h-5" />
       </div>
     </section>
   )
