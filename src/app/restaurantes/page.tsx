@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
-import { MapPin, Star, Clock, Phone } from "lucide-react"
+import { MapPin, Star, Clock } from "lucide-react"
 import { Restaurant, Municipality } from "@prisma/client"
 
 type RestaurantWithMunicipality = Restaurant & {
@@ -8,19 +8,24 @@ type RestaurantWithMunicipality = Restaurant & {
 }
 
 interface Props {
-  searchParams: Promise<{ municipio?: string; tipo?: string }>
+  searchParams: Promise<{ municipio?: string }>
+}
+
+const restaurantImages: Record<string, string> = {
+  "restaurante-barichara-plaza": "https://res.cloudinary.com/dxalbznya/image/upload/v1782422294/casona_e178vc.png",
+  "restaurante-leal-bucaramanga": "https://res.cloudinary.com/dxalbznya/image/upload/v1782422310/El_Viejo_Chiflas_Restaurante_Bucaramanga_Santander_4_94e75935ab_nqva1p.jpg",
+  "restaurante-san-gil-aventura": "https://res.cloudinary.com/dxalbznya/image/upload/v1782422328/gringo-mike-s_cfyrxu.jpg",
 }
 
 export default async function RestaurantesPage({ searchParams }: Props) {
   const params = await searchParams
-  const { municipio, tipo } = params
+  const { municipio } = params
 
   const [restaurants, municipalities] = await Promise.all([
     prisma.restaurant.findMany({
       where: {
         status: "PUBLISHED",
         ...(municipio && { municipality: { slug: municipio } }),
-        ...(tipo && { foodType: { contains: tipo, mode: "insensitive" } }),
       },
       include: { municipality: true },
       orderBy: { rating: "desc" },
@@ -29,81 +34,80 @@ export default async function RestaurantesPage({ searchParams }: Props) {
   ])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh", paddingTop: "80px" }}>
 
       {/* Header */}
-      <div className="bg-orange-800 text-white py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Restaurantes</h1>
-          <p className="text-orange-200 text-lg">
-            La mejor gastronomía típica de Santander
-          </p>
-        </div>
+      <div style={{ padding: "60px 24px 48px", maxWidth: "1152px", margin: "0 auto" }}>
+        <p style={{ color: "#6ee7b7", fontSize: "11px", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", marginBottom: "12px" }}>
+          Santander, Colombia
+        </p>
+        <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 6vw, 64px)", fontWeight: 700, color: "#ffffff", margin: "0 0 16px", lineHeight: 1 }}>
+          Restaurantes
+        </h1>
+        <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "16px", margin: 0 }}>
+          La mejor gastronomía típica de Santander
+        </p>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <div className="flex flex-col lg:flex-row gap-8">
+      <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px 120px", display: "flex", gap: "40px" }}>
 
-          {/* Sidebar */}
-          <aside className="lg:w-56 shrink-0">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sticky top-24">
-              <div className="font-semibold text-gray-900 mb-4">Municipio</div>
-              <div className="flex flex-col gap-2">
-                <Link
-                  href="/restaurantes"
-                  className={`text-sm px-3 py-2 rounded-lg transition-colors ${
-                    !municipio
-                      ? "bg-orange-50 text-orange-700 font-medium"
-                      : "text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  Todos
-                </Link>
-                {municipalities.map((mun) => (
-                  <Link
-                    key={mun.id}
-                    href={`/restaurantes?municipio=${mun.slug}`}
-                    className={`text-sm px-3 py-2 rounded-lg transition-colors ${
-                      municipio === mun.slug
-                        ? "bg-orange-50 text-orange-700 font-medium"
-                        : "text-gray-600 hover:bg-gray-50"
-                    }`}
-                  >
-                    {mun.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </aside>
-
-          {/* Grid */}
-          <div className="flex-1">
-            <p className="text-gray-500 text-sm mb-6">
-              <span className="font-semibold text-gray-900">{restaurants.length}</span> restaurantes encontrados
+        {/* Sidebar */}
+        <aside style={{ width: "200px", flexShrink: 0 }}>
+          <div style={{ position: "sticky", top: "100px" }}>
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", marginBottom: "12px" }}>
+              Municipio
             </p>
-
-            {restaurants.length === 0 ? (
-              <div className="text-center py-20">
-                <div className="text-5xl mb-4">🍽️</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  No hay restaurantes disponibles
-                </h3>
-                <p className="text-gray-500 mb-6">Intenta con otros filtros</p>
-                <Link
-                  href="/restaurantes"
-                  className="bg-orange-600 hover:bg-orange-700 text-white font-medium px-6 py-3 rounded-xl transition-colors"
-                >
-                  Ver todos
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+              <Link href="/restaurantes" style={{
+                padding: "8px 12px", borderRadius: "8px", fontSize: "13px", fontWeight: 500,
+                textDecoration: "none",
+                background: !municipio ? "#1a2e1f" : "transparent",
+                color: !municipio ? "#6ee7b7" : "rgba(255,255,255,0.5)",
+                border: !municipio ? "1px solid #2a4a2e" : "1px solid transparent",
+              }}>
+                Todos
+              </Link>
+              {municipalities.map((mun) => (
+                <Link key={mun.id} href={`/restaurantes?municipio=${mun.slug}`} style={{
+                  padding: "8px 12px", borderRadius: "8px", fontSize: "13px", fontWeight: 500,
+                  textDecoration: "none",
+                  background: municipio === mun.slug ? "#1a2e1f" : "transparent",
+                  color: municipio === mun.slug ? "#6ee7b7" : "rgba(255,255,255,0.5)",
+                  border: municipio === mun.slug ? "1px solid #2a4a2e" : "1px solid transparent",
+                }}>
+                  {mun.name}
                 </Link>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {restaurants.map((restaurant) => (
-                  <RestaurantCard key={restaurant.id} restaurant={restaurant} />
-                ))}
-              </div>
-            )}
+              ))}
+            </div>
           </div>
+        </aside>
+
+        {/* Grid */}
+        <div style={{ flex: 1 }}>
+          <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "13px", marginBottom: "24px" }}>
+            <span style={{ color: "white", fontWeight: 600 }}>{restaurants.length}</span> restaurantes encontrados
+          </p>
+
+          {restaurants.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "80px 0" }}>
+              <div style={{ fontSize: "48px", marginBottom: "16px" }}>🍽️</div>
+              <h3 style={{ color: "white", fontSize: "20px", fontWeight: 600, marginBottom: "8px" }}>
+                No hay restaurantes disponibles
+              </h3>
+              <Link href="/restaurantes" style={{
+                background: "#15803d", color: "white", padding: "12px 24px",
+                borderRadius: "12px", textDecoration: "none", fontWeight: 600, fontSize: "14px",
+              }}>
+                Ver todos
+              </Link>
+            </div>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+              {restaurants.map((r) => (
+                <RestaurantCard key={r.id} restaurant={r} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -111,72 +115,89 @@ export default async function RestaurantesPage({ searchParams }: Props) {
 }
 
 function RestaurantCard({ restaurant: r }: { restaurant: RestaurantWithMunicipality }) {
-  const stars = Math.round(r.rating)
+  const restaurantImages: Record<string, string> = {
+    "restaurante-barichara-plaza": "https://res.cloudinary.com/dxalbznya/image/upload/v1782422294/casona_e178vc.png",
+    "restaurante-leal-bucaramanga": "https://res.cloudinary.com/dxalbznya/image/upload/v1782422310/El_Viejo_Chiflas_Restaurante_Bucaramanga_Santander_4_94e75935ab_nqva1p.jpg",
+    "restaurante-san-gil-aventura": "https://res.cloudinary.com/dxalbznya/image/upload/v1782422328/gringo-mike-s_cfyrxu.jpg",
+  }
 
   return (
     <Link
       href={`/restaurantes/${r.slug}`}
-      className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+      style={{ textDecoration: "none", display: "block", borderRadius: "16px", overflow: "hidden", background: "#1a1a1a", border: "1px solid #2a2a2a" }}
     >
       {/* Imagen */}
-      <div className="h-44 bg-gradient-to-br from-orange-400 to-red-500 relative">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-7xl opacity-20">🍽️</span>
-        </div>
-        <div className="absolute top-3 left-3">
-          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/90 text-orange-700">
+      <div style={{ position: "relative", height: "200px", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: `url('${restaurantImages[r.slug] || ""}')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundColor: "#1a1a1a",
+        }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%)" }} />
+        <div style={{ position: "absolute", top: "12px", left: "12px" }}>
+          <span style={{
+            background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)",
+            border: "0.5px solid rgba(255,255,255,0.25)",
+            color: "white", fontSize: "11px", fontWeight: 600,
+            padding: "4px 10px", borderRadius: "20px",
+          }}>
             {r.foodType}
           </span>
         </div>
         {r.rating > 0 && (
-          <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5 flex items-center gap-1">
-            <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
-            <span className="font-bold text-gray-900 text-sm">{r.rating.toFixed(1)}</span>
+          <div style={{ position: "absolute", bottom: "12px", right: "12px", display: "flex", alignItems: "center", gap: "4px", background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", borderRadius: "10px", padding: "5px 10px" }}>
+            <Star size={12} color="#fbbf24" fill="#fbbf24" />
+            <span style={{ color: "white", fontWeight: 700, fontSize: "13px" }}>{r.rating.toFixed(1)}</span>
           </div>
         )}
       </div>
 
-      {/* Contenido */}
-      <div className="p-5">
-        <h3 className="font-bold text-gray-900 text-lg mb-1 group-hover:text-orange-600 transition-colors line-clamp-1">
+      {/* Info */}
+      <div style={{ padding: "18px" }}>
+        <h3 style={{ fontFamily: "var(--font-display)", color: "white", fontSize: "16px", fontWeight: 700, margin: "0 0 6px" }}>
           {r.name}
         </h3>
-        <div className="flex items-center gap-1 text-gray-500 text-sm mb-3">
-          <MapPin className="w-4 h-4 shrink-0" />
+        <div style={{ display: "flex", alignItems: "center", gap: "4px", color: "rgba(255,255,255,0.4)", fontSize: "12px", marginBottom: "12px" }}>
+          <MapPin size={12} />
           <span>{r.municipality.name}</span>
         </div>
-
         {r.specialties.length > 0 && (
-          <div className="mb-4">
-            <div className="text-xs text-gray-500 mb-1.5">Especialidades</div>
-            <div className="flex flex-wrap gap-1">
-              {r.specialties.slice(0, 3).map((s, i) => (
-                <span key={i} className="text-xs bg-orange-50 text-orange-700 px-2 py-1 rounded-full">
+          <div style={{ marginBottom: "14px" }}>
+            <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "10px", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase", marginBottom: "6px" }}>
+              Especialidades
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+              {r.specialties.slice(0, 2).map((s, i) => (
+                <span key={i} style={{
+                  background: "#141414", border: "1px solid #2a2a2a",
+                  color: "rgba(255,255,255,0.45)", fontSize: "11px",
+                  padding: "3px 8px", borderRadius: "20px",
+                }}>
                   {s}
                 </span>
               ))}
-              {r.specialties.length > 3 && (
-                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-                  +{r.specialties.length - 3}
+              {r.specialties.length > 2 && (
+                <span style={{
+                  background: "#141414", border: "1px solid #2a2a2a",
+                  color: "rgba(255,255,255,0.3)", fontSize: "11px",
+                  padding: "3px 8px", borderRadius: "20px",
+                }}>
+                  +{r.specialties.length - 2}
                 </span>
               )}
             </div>
           </div>
         )}
-
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div className="text-sm text-gray-600">
-            Precio promedio
-          </div>
-          <div className="font-bold text-gray-900">
-            ${r.priceAvg.toLocaleString("es-CO")}
-          </div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "12px", borderTop: "1px solid #2a2a2a" }}>
+          <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px" }}>Precio promedio</span>
+          <span style={{ color: "white", fontWeight: 700, fontSize: "14px" }}>${r.priceAvg.toLocaleString("es-CO")}</span>
         </div>
-
         {r.schedule && (
-          <div className="flex items-center gap-1.5 mt-3 text-xs text-gray-500">
-            <Clock className="w-3.5 h-3.5 shrink-0" />
-            <span className="line-clamp-1">{r.schedule}</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "10px", color: "rgba(255,255,255,0.3)", fontSize: "11px" }}>
+            <Clock size={11} />
+            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.schedule}</span>
           </div>
         )}
       </div>
