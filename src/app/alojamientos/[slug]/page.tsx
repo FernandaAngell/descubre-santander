@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
-import { MapPin, Users, Phone, Clock, DollarSign, ExternalLink } from "lucide-react"
+import { MapPin, Phone, ExternalLink } from "lucide-react"
 import Link from "next/link"
+import ReviewForm from "@/components/ReviewForm"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -159,6 +160,9 @@ export default async function AlojamientoDetailPage({ params }: Props) {
                   ))}
                 </div>
               )}
+              <div className="mt-6">
+                <ReviewForm accommodationId={accommodation.id} />
+              </div>
             </div>
           </div>
 
@@ -223,6 +227,6 @@ export default async function AlojamientoDetailPage({ params }: Props) {
           </div>
         </div>
       </div>
-    git add .</div>
+    </div>
   )
 }
