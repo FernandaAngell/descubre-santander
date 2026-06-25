@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Category } from "@prisma/client"
 
@@ -7,27 +9,49 @@ interface Props {
 
 export default function CategoriesSection({ categories }: Props) {
   return (
-    <section className="py-20 px-4 bg-gray-50">
-      <div className="max-w-7xl mx-auto">
+    <section style={{ backgroundColor: "#0a0a0a", padding: "0 24px 80px" }}>
+      <div style={{ maxWidth: "1152px", margin: "0 auto" }}>
 
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            ¿Qué quieres explorar?
-          </h2>
-          <p className="text-gray-500 text-lg max-w-xl mx-auto">
-            Encuentra experiencias únicas según tus intereses
+        <div style={{ textAlign: "center", marginBottom: "48px" }}>
+          <p style={{ color: "#6ee7b7", fontSize: "11px", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", marginBottom: "12px" }}>
+            Explora por categoría
           </p>
+          <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "#ffffff", margin: 0 }}>
+            ¿Qué quieres vivir?
+          </h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "12px" }}>
           {categories.map((category) => (
             <Link
               key={category.id}
               href={`/lugares?categoria=${category.slug}`}
-              className="group flex flex-col items-center gap-3 bg-white rounded-2xl p-6 shadow-sm hover:shadow-md border border-gray-100 hover:border-emerald-200 transition-all duration-200 hover:-translate-y-1"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "12px",
+                background: "#1a1a1a",
+                borderRadius: "16px",
+                padding: "28px 12px",
+                border: "1px solid #2a2a2a",
+                textDecoration: "none",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "#6ee7b7"
+                e.currentTarget.style.background = "#1a2e1f"
+                e.currentTarget.style.transform = "translateY(-4px)"
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "#2a2a2a"
+                e.currentTarget.style.background = "#1a1a1a"
+                e.currentTarget.style.transform = "translateY(0)"
+              }}
             >
-              <span className="text-4xl">{category.icon}</span>
-              <span className="font-medium text-gray-700 group-hover:text-emerald-600 text-sm text-center transition-colors">
+              <span style={{ fontSize: "36px", lineHeight: 1 }}>{category.icon}</span>
+              <span style={{ fontSize: "12px", fontWeight: 600, color: "#9ca3af", textAlign: "center" }}>
                 {category.name}
               </span>
             </Link>

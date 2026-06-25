@@ -31,64 +31,53 @@ export default function Navbar() {
     <nav className={cn(
       "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
       scrolled
-        ? "bg-white shadow-sm border-b border-gray-100"
+        ? "bg-black/90 backdrop-blur-md border-b border-white/10"
         : "bg-transparent"
     )}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="relative flex items-center justify-between h-20">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className={cn(
-              "w-8 h-8 rounded-full flex items-center justify-center transition-colors",
-              scrolled ? "bg-emerald-700" : "bg-white/20 backdrop-blur-sm"
-            )}>
+          <Link href="/" className="flex items-center gap-2.5 w-52">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-emerald-700">
               <MapPin className="w-4 h-4 text-white" />
             </div>
-            <span className={cn(
-              "font-semibold text-lg tracking-tight transition-colors",
-              scrolled ? "text-gray-900" : "text-white"
-            )}>
-              Descubre <span className={scrolled ? "text-emerald-700" : "text-emerald-300"}>Santander</span>
+            <span className="font-semibold text-lg tracking-tight text-white">
+              Descubre <span className="text-emerald-400">Santander</span>
             </span>
           </Link>
 
-          {/* Links escritorio */}
-<div className="hidden md:flex items-center gap-15">
-  {navLinks.map((link) => (
-    <Link
-      key={link.href}
-      href={link.href}
-      style={{
-        fontSize: "14px",
-        fontWeight: "600",
-        transition: "color 0.2s",
-        color: scrolled ? "#374151" : "rgba(255,255,255,0.85)",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.color = scrolled ? "#15803d" : "#ffffff"
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.color = scrolled ? "#374151" : "rgba(255,255,255,0.85)"
-      }}
-    >
-      {link.label}
-    </Link>
-  ))}
-</div>
+          {/* Links — centro */}
+          <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2 translate-x-16">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  transition: "color 0.2s",
+                  color: "rgba(255,255,255,0.85)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#ffffff"
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "rgba(255,255,255,0.85)"
+                }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
 
-          {/* Botones escritorio */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Botones — derecha */}
+          <div className="hidden md:flex items-center gap-3 w-52 justify-end">
             {session ? (
               <div className="relative">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className={cn(
-                    "flex items-center gap-2 px-4 py-2 rounded-full transition-all",
-                    scrolled
-                      ? "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                      : "bg-white/15 backdrop-blur-sm hover:bg-white/25 text-white"
-                  )}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 backdrop-blur-sm hover:bg-white/25 text-white transition-all"
                 >
                   {session.user?.image ? (
                     <Image
@@ -147,16 +136,20 @@ export default function Navbar() {
               <>
                 <Link
                   href="/auth/login"
-                  className={cn(
-                    "text-sm font-medium transition-colors",
-                    scrolled ? "text-gray-700 hover:text-emerald-700" : "text-white/90 hover:text-white"
-                  )}
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    color: "rgba(255,255,255,0.9)",
+                    transition: "color 0.2s",
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = "#ffffff"}
+                  onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.9)"}
                 >
                   Iniciar sesión
                 </Link>
                 <Link
                   href="/auth/login"
-                  className="bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors"
+                  className="bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors"
                 >
                   Registrarse
                 </Link>
@@ -167,10 +160,7 @@ export default function Navbar() {
           {/* Botón menú móvil */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className={cn(
-              "md:hidden p-2 rounded-lg transition-colors",
-              scrolled ? "text-gray-700 hover:bg-gray-100" : "text-white hover:bg-white/10"
-            )}
+            className="md:hidden p-2 rounded-lg text-white hover:bg-white/10 transition-colors"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -179,7 +169,7 @@ export default function Navbar() {
 
       {/* Menú móvil */}
       <div className={cn(
-        "md:hidden bg-white border-t border-gray-100 transition-all duration-300",
+        "md:hidden bg-black/95 border-t border-white/10 transition-all duration-300",
         isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
       )}>
         <div className="px-6 py-4 flex flex-col gap-4">
@@ -188,20 +178,20 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               onClick={() => setIsOpen(false)}
-              className="text-gray-700 hover:text-emerald-700 font-medium py-2 transition-colors"
+              className="text-white/80 hover:text-white font-medium py-2 transition-colors"
             >
               {link.label}
             </Link>
           ))}
-          <div className="border-t border-gray-100 pt-4 flex flex-col gap-3">
+          <div className="border-t border-white/10 pt-4 flex flex-col gap-3">
             {session ? (
               <>
-                <Link href="/favoritos" onClick={() => setIsOpen(false)} className="text-gray-700 font-medium py-2">Mis favoritos</Link>
-                <button onClick={() => signOut({ callbackUrl: "/" })} className="text-red-500 font-medium py-2 text-left">Cerrar sesión</button>
+                <Link href="/favoritos" onClick={() => setIsOpen(false)} className="text-white/80 font-medium py-2">Mis favoritos</Link>
+                <button onClick={() => signOut({ callbackUrl: "/" })} className="text-red-400 font-medium py-2 text-left">Cerrar sesión</button>
               </>
             ) : (
               <>
-                <Link href="/auth/login" onClick={() => setIsOpen(false)} className="text-gray-700 font-medium py-2">Iniciar sesión</Link>
+                <Link href="/auth/login" onClick={() => setIsOpen(false)} className="text-white/80 font-medium py-2">Iniciar sesión</Link>
                 <Link href="/auth/login" onClick={() => setIsOpen(false)} className="bg-emerald-700 text-white font-medium px-5 py-2.5 rounded-full text-center">Registrarse</Link>
               </>
             )}

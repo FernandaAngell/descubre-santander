@@ -14,9 +14,11 @@ export default async function Home() {
   ])
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#0a0a0a"  }}>
       <HeroSection />
+      <div style={{ height: "80px", backgroundColor: "#0a0a0a"  }} />
       <CategoriesSection categories={categories} />
+      <div style={{ height: "32px", backgroundColor: "#0a0a0a" }} />
       <FeaturedPlaces places={featuredPlaces} />
     </div>
   )

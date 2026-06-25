@@ -18,14 +18,14 @@ export default function HeroSection() {
 
     const particles: { x: number; y: number; size: number; speedX: number; speedY: number; opacity: number }[] = []
 
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 60; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 2 + 0.5,
+        size: Math.random() * 1.5 + 0.5,
         speedX: (Math.random() - 0.5) * 0.3,
         speedY: (Math.random() - 0.5) * 0.3,
-        opacity: Math.random() * 0.5 + 0.1,
+        opacity: Math.random() * 0.4 + 0.1,
       })
     }
 
@@ -54,7 +54,6 @@ export default function HeroSection() {
       canvas.height = window.innerHeight
     }
     window.addEventListener("resize", handleResize)
-
     return () => {
       cancelAnimationFrame(animId)
       window.removeEventListener("resize", handleResize)
@@ -62,103 +61,103 @@ export default function HeroSection() {
   }, [])
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden -mt-20">
+    <section className="relative h-screen flex items-center justify-center overflow-hidden" style={{ marginTop: "-80px" }}>
 
-      {/* Fondo con imagen de Barichara */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1733153453347-f80cf175fca5?w=1920&q=80')",
-        }}
-      />
+      {/* Foto de Barichara */}
+      {/* Fondo verde oscuro */}
+<div
+  className="absolute inset-0"
+  style={{ backgroundColor: "#1a3d2b" }}
+/>
 
-      {/* Overlay gradiente */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/75" />
-
+      {/* Degradado negro hacia abajo */}
+<div
+  className="absolute inset-0"
+  style={{
+    background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, #0a0a0a 100%)"
+  }}
+/>
       {/* Partículas */}
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
 
       {/* Contenido */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-20">
+      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center pt-20">
 
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs font-medium px-4 py-2 rounded-full mb-8 tracking-widest uppercase">
-          Colombia • Santander
+        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white/80 text-xs font-medium px-4 py-1.5 rounded-full mb-6 tracking-widest uppercase">
+          Colombia · Santander
         </div>
 
         {/* Título */}
-        <h1 className="font-display text-6xl md:text-8xl font-bold text-white mb-6 leading-none tracking-tight">
+        <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 leading-none tracking-tight"
+          style={{ fontFamily: "var(--font-display)" }}>
           Descubre lo
           <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-300">
+          <span style={{
+            background: "linear-gradient(to right, #6ee7b7, #2dd4bf)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}>
             extraordinario
           </span>
         </h1>
 
         {/* Subtítulo */}
-        <p className="text-white/70 text-lg md:text-xl mb-12 max-w-2xl mx-auto font-light leading-relaxed">
+        <p className="text-white/65 text-base md:text-lg mb-10 max-w-xl mx-auto font-light leading-relaxed">
           Cascadas escondidas, pueblos coloniales y aventuras únicas en el corazón de Colombia
         </p>
 
         {/* Buscador */}
-<div style={{
-  display: "flex",
-  maxWidth: "600px",
-  margin: "0 auto 4rem",
-  background: "white",
-  borderRadius: "16px",
-  boxShadow: "0 25px 50px rgba(0,0,0,0.3)",
-  overflow: "hidden",
-}}>
-  <div style={{ flex: 1, position: "relative" }}>
-    <Search style={{
-      position: "absolute",
-      left: "20px",
-      top: "50%",
-      transform: "translateY(-50%)",
-      width: "18px",
-      height: "18px",
-      color: "#9ca3af"
-    }} />
-    <input
-      type="text"
-      placeholder="Busca un destino, municipio o experiencia..."
-      style={{
-        width: "100%",
-        paddingLeft: "52px",
-        paddingRight: "16px",
-        paddingTop: "14px",
-        paddingBottom: "14px",
-        fontSize: "14px",
-        color: "#1f2937",
-        border: "none",
-        outline: "none",
-        background: "transparent",
-      }}
-    />
-  </div>
-  <Link
-    href="/lugares"
-    style={{
-      background: "#15803d",
-      color: "white",
-      fontWeight: "600",
-      padding: "14px 28px",
-      fontSize: "14px",
-      whiteSpace: "nowrap",
-      transition: "background 0.2s",
-      display: "flex",
-      alignItems: "center",
-    }}
-    onMouseEnter={(e) => (e.currentTarget.style.background = "#16a34a")}
-    onMouseLeave={(e) => (e.currentTarget.style.background = "#15803d")}
-  >
-    Explorar
-  </Link>
-</div>
+        <div className="flex max-w-xl mx-auto mb-10 bg-white rounded-xl shadow-2xl overflow-hidden">
+          <div className="flex-1 relative">
+            <Search style={{
+              position: "absolute",
+              left: "16px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              width: "16px",
+              height: "16px",
+              color: "#9ca3af"
+            }} />
+            <input
+              type="text"
+              placeholder="Busca un destino o municipio..."
+              style={{
+                width: "100%",
+                paddingLeft: "44px",
+                paddingRight: "16px",
+                paddingTop: "14px",
+                paddingBottom: "14px",
+                fontSize: "14px",
+                color: "#1f2937",
+                border: "none",
+                outline: "none",
+                background: "transparent",
+              }}
+            />
+          </div>
+          <Link
+            href="/lugares"
+            style={{
+              background: "#15803d",
+              color: "white",
+              fontWeight: "600",
+              padding: "14px 24px",
+              fontSize: "14px",
+              whiteSpace: "nowrap",
+              display: "flex",
+              alignItems: "center",
+              transition: "background 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "#16a34a")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "#15803d")}
+          >
+            Explorar
+          </Link>
+        </div>
 
         {/* Stats */}
-        <div className="flex flex-wrap justify-center gap-10">
+        <div className="flex flex-wrap justify-center gap-8">
           {[
             { num: "87", label: "Municipios" },
             { num: "+200", label: "Destinos" },
@@ -166,15 +165,15 @@ export default function HeroSection() {
             { num: "+30", label: "Restaurantes" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
-              <div className="text-3xl font-bold text-white">{stat.num}</div>
-              <div className="text-white/50 text-xs uppercase tracking-widest mt-1">{stat.label}</div>
+              <div className="text-2xl font-bold text-white">{stat.num}</div>
+              <div className="text-white/45 text-xs uppercase tracking-widest mt-1">{stat.label}</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 animate-bounce">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/30 animate-bounce">
         <ArrowDown className="w-5 h-5" />
       </div>
     </section>

@@ -1,10 +1,14 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Inter, Playfair_Display } from "next/font/google"
 import "./globals.css"
 import Navbar from "@/components/Navbar"
 import AuthProvider from "@/components/auth/AuthProvider"
 
 const inter = Inter({ subsets: ["latin"] })
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-display",
+})
 
 export const metadata: Metadata = {
   title: "Descubre Santander — Turismo en Santander, Colombia",
@@ -19,10 +23,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={inter.className}>
+      <body
+        className={`${inter.className} ${playfair.variable}`}
+        style={{ backgroundColor: "#ffffff", margin: 0, padding: 0 }}
+      >
         <AuthProvider>
           <Navbar />
-          {children}
+          <main style={{ backgroundColor: "#ffffff" }}>
+            {children}
+          </main>
         </AuthProvider>
       </body>
     </html>
