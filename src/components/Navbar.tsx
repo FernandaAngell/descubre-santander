@@ -128,7 +128,7 @@ export default function Navbar() {
                       <Link 
                         href="/favoritos" 
                         onClick={() => setShowUserMenu(false)} 
-                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-neutral-300 hover:text-white hover:bg-white/5 transition-all text-xs font-medium"
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-white hover:text-emerald-400 hover:bg-white/5 transition-all text-xs font-medium"
                       >
                         <Heart size={14} className="text-red-400" />
                         Mis favoritos
