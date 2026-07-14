@@ -125,14 +125,33 @@ export default function Navbar() {
                         <div className="text-xs font-semibold text-white truncate">{session.user?.name}</div>
                         <div className="text-[10px] text-white/40 truncate">{session.user?.email}</div>
                       </div>
-                      <Link 
-                        href="/favoritos" 
-                        onClick={() => setShowUserMenu(false)} 
-                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-white hover:text-emerald-400 hover:bg-white/5 transition-all text-xs font-medium"
-                      >
-                        <Heart size={14} className="text-red-400" />
-                        Mis favoritos
-                      </Link>
+                      <Link
+  href="/favoritos"
+  onClick={() => setShowUserMenu(false)}
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    padding: "10px 12px",
+    borderRadius: "12px",
+    color: "#ffffff",
+    fontSize: "13px",
+    fontWeight: 500,
+    textDecoration: "none",
+    transition: "all .2s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.background = "rgba(255,255,255,.05)"
+    e.currentTarget.style.color = "#6ee7b7"
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.background = "transparent"
+    e.currentTarget.style.color = "#ffffff"
+  }}
+>
+  <Heart size={14} color="#f87171" />
+  Mis favoritos
+</Link>
                       {session.user?.role === "ADMIN" && (
                         <Link 
                           href="/admin" 
