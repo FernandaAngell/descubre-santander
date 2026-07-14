@@ -71,7 +71,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-semibold text-white/85 hover:text-white transition-colors duration-200"
+                className="text-sm font-semibold text-white hover:text-white/80 transition-colors duration-200"
               >
                 {link.label}
               </Link>
@@ -204,7 +204,7 @@ export default function Navbar() {
                 key={link.href} 
                 href={link.href} 
                 onClick={() => setIsOpen(false)} 
-                className="text-[15px] font-medium text-white/70 hover:text-white hover:bg-white/5 px-3 py-2.5 rounded-xl transition-all"
+                className="text-[15px] font-medium text-white hover:bg-white/5 px-3 py-2.5 rounded-xl transition-all"
               >
                 {link.label}
               </Link>
