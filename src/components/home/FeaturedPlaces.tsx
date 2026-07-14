@@ -33,10 +33,14 @@ const categoryIcons: Record<string, React.ReactNode> = {
 
 export default function FeaturedPlaces({ places }: Props) {
   return (
-    <section style={{ backgroundColor: "#0a0a0a", padding: "0 24px 120px" }}>
+    <section 
+      style={{ backgroundColor: "#0a0a0a" }} 
+      className="px-6 pb-20 md:pb-[120px] pt-0"
+    >
       <div style={{ maxWidth: "1152px", margin: "0 auto" }}>
 
-        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "32px" }}>
+        {/* Encabezado: Se apila en vertical en móvil, side-by-side en pantallas sm en adelante */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
             <p style={{ color: "#4ade80", fontSize: "12px", fontWeight: 600, letterSpacing: "4px", textTransform: "uppercase", marginBottom: "12px" }}>
               Para empezar tu viaje
@@ -53,7 +57,8 @@ export default function FeaturedPlaces({ places }: Props) {
           </Link>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+        {/* Cuadrícula adaptable: 1 columna en móvil, 2 en tablets (sm) y 3 en computadoras (lg) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {places.map((place) => (
             <Link
               key={place.id}
