@@ -8,92 +8,73 @@ export default async function LoginPage() {
   if (session) redirect("/")
 
   return (
-    <div style={{
-      backgroundColor: "#0a0f0c",
-      minHeight: "100vh",
-      paddingTop: "80px",
-      backgroundImage: "radial-gradient(ellipse 60% 50% at 0% 100%, rgba(21,128,61,0.25) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 100% 60%, rgba(21,128,61,0.1) 0%, transparent 60%)",
-    }}>
-      <div style={{
-        maxWidth: "1152px", margin: "0 auto",
-        padding: "40px 24px 100px",
-        display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: "72px",
-        alignItems: "center",
-      }}>
+    <div 
+      className="bg-[#0a0f0c] min-h-screen flex items-center justify-center pt-24 pb-12 md:py-20"
+      style={{
+        backgroundImage: "radial-gradient(ellipse 60% 50% at 0% 100%, rgba(21,128,61,0.25) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 100% 60%, rgba(21,128,61,0.1) 0%, transparent 60%)",
+      }}
+    >
+      {/* Grid: 1 columna en móvil para que no se amontone, 2 columnas en desktop */}
+      <div className="w-full max-w-[1152px] mx-auto px-6 sm:px-8 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-[72px] items-center">
 
-        {/* Foto del cañón */}
-        <div style={{
-          borderRadius: "18px", overflow: "hidden",
-          aspectRatio: "0.72", position: "relative",
-        }}>
-          <div style={{
-            position: "absolute", inset: 0,
-            backgroundImage: "url('https://res.cloudinary.com/dxalbznya/image/upload/v1782403498/ca%C3%B1on_ejyedw.jpg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }} />
+        {/* Foto del cañón: Oculta en móviles (hidden), visible a partir de pantallas medianas (md:block) */}
+        <div className="hidden md:block w-full rounded-2xl overflow-hidden aspect-[0.72] relative shadow-2xl border border-white/5">
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage: "url('https://res.cloudinary.com/dxalbznya/image/upload/v1782403498/ca%C3%B1on_ejyedw.jpg')",
+            }} 
+          />
         </div>
 
-        {/* Contenido */}
-        <div>
-          <div style={{
-            width: "52px", height: "52px",
-            background: "#15803d", borderRadius: "50%",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            marginBottom: "36px",
-            boxShadow: "0 0 40px rgba(74,222,128,0.35)",
-          }}>
-            <MapPin size={24} color="white" />
+        {/* Contenido/Formulario: Centrado en móviles (max-w-md mx-auto) */}
+        <div className="w-full max-w-md mx-auto md:max-w-none flex flex-col justify-center">
+          <div className="w-12 h-12 bg-emerald-700 rounded-full flex items-center justify-center mb-6 md:mb-8 shadow-[0_0_40px_rgba(74,222,128,0.35)]">
+            <MapPin size={22} color="white" />
           </div>
 
-          <h1 style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(44px, 5.5vw, 72px)",
-            fontWeight: 600, color: "#f5f0e8",
-            margin: "0 0 24px", lineHeight: 1.05,
-          }}>
+          <h1 
+            style={{
+              fontFamily: "var(--font-display)",
+              lineHeight: 1.05,
+            }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#f5f0e8] mb-6 tracking-tight"
+          >
             Haz tu viaje<br />más tuyo
           </h1>
 
-          <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "17px", lineHeight: 1.6, margin: "0 0 40px", maxWidth: "440px" }}>
+          <p className="text-white/60 text-base md:text-lg leading-relaxed mb-8 md:mb-10 max-w-[440px]">
             Inicia sesión para descubrir lo mejor de Santander
             y vivir experiencias únicas.
           </p>
 
           {/* Beneficios */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "22px", marginBottom: "44px" }}>
+          <div className="flex flex-col gap-4 md:gap-5 mb-8 md:mb-10">
             {[
               "Guarda tus lugares favoritos",
               "Comparte reseñas reales",
               "Encuentra experiencias para ti",
             ].map((benefit) => (
-              <div key={benefit} style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                <div style={{
-                  width: "40px", height: "40px",
-                  background: "rgba(74,222,128,0.08)",
-                  border: "1px solid rgba(74,222,128,0.25)",
-                  borderRadius: "50%",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0,
-                }}>
-                  <Check size={16} color="#4ade80" strokeWidth={3} />
+              <div key={benefit} className="flex items-center gap-4">
+                <div className="w-9 h-9 md:w-10 md:h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Check size={14} className="text-[#4ade80]" strokeWidth={3} />
                 </div>
-                <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "16px" }}>{benefit}</span>
+                <span className="text-white/80 text-sm md:text-base font-medium">{benefit}</span>
               </div>
             ))}
           </div>
 
           {/* Botón Google */}
-          <div style={{ maxWidth: "450px" }}>
+          <div className="w-full">
             <LoginButton />
           </div>
 
-          <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "14px", marginTop: "24px", lineHeight: 1.6 }}>
+          <p className="text-white/35 text-xs md:text-sm mt-6 md:mt-8 leading-relaxed">
             Al continuar, aceptas nuestros{" "}
-            <span style={{ color: "#4ade80" }}>Términos de uso</span>
+            <span className="text-emerald-400 hover:underline cursor-pointer">Términos de uso</span>
             <br />
             y nuestra{" "}
-            <span style={{ color: "#4ade80" }}>Política de privacidad</span>.
+            <span className="text-emerald-400 hover:underline cursor-pointer">Política de privacidad</span>.
           </p>
         </div>
       </div>
