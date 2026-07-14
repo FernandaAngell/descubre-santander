@@ -1,5 +1,8 @@
+"use client"
+
 import Link from "next/link"
-import { LayoutDashboard, MapPin, Building, UtensilsCrossed, LogOut } from "lucide-react"
+import { usePathname } from "next/navigation"
+import { LayoutDashboard, MapPin, Building, UtensilsCrossed, ArrowLeft } from "lucide-react"
 
 const adminLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -9,44 +12,88 @@ const adminLinks = [
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+
   return (
-    <div className="min-h-screen bg-gray-50 flex" style={{ paddingTop: 0 }}>
+    <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#0a0a0a" }}>
 
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-900 text-white shrink-0 fixed top-0 left-0 h-full z-50">
-        <div className="p-6 border-b border-gray-700">
-          <Link href="/" className="text-emerald-400 font-bold text-lg">
+      <aside style={{
+        width: "220px",
+        backgroundColor: "#111111",
+        borderRight: "1px solid #222222",
+        position: "fixed",
+        top: 0, left: 0,
+        height: "100vh",
+        zIndex: 40,
+        display: "flex",
+        flexDirection: "column",
+      }}>
+
+        {/* Logo */}
+        <div style={{ padding: "28px 20px 20px", borderBottom: "1px solid #222222" }}>
+          <div style={{ color: "#6ee7b7", fontWeight: 700, fontSize: "15px", marginBottom: "3px" }}>
             Descubre Santander
-          </Link>
-          <div className="text-gray-400 text-xs mt-1">Panel admin</div>
+          </div>
+          <div style={{ color: "rgba(255,255,255,0.25)", fontSize: "11px", letterSpacing: "1px" }}>
+            PANEL ADMIN
+          </div>
         </div>
 
-        <nav className="p-4 flex flex-col gap-1">
-          {adminLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-800 hover:text-white transition-colors text-sm font-medium"
-            >
-              <link.icon className="w-4 h-4" />
-              {link.label}
-            </Link>
-          ))}
+        {/* Nav */}
+        <nav style={{ padding: "16px 12px", flex: 1, display: "flex", flexDirection: "column", gap: "4px" }}>
+          {adminLinks.map((link) => {
+            const isActive = pathname === link.href
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  padding: "10px 14px",
+                  borderRadius: "10px",
+                  textDecoration: "none",
+                  fontSize: "13px",
+                  fontWeight: isActive ? 600 : 500,
+                  color: isActive ? "#6ee7b7" : "rgba(255,255,255,0.45)",
+                  background: isActive ? "#0f2318" : "transparent",
+                  border: isActive ? "1px solid #1a3d2b" : "1px solid transparent",
+                  transition: "all 0.15s",
+                }}
+              >
+                <link.icon size={15} />
+                {link.label}
+              </Link>
+            )
+          })}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700">
-          <Link
-            href="/"
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-white transition-colors text-sm"
-          >
-            <LogOut className="w-4 h-4" />
+        {/* Volver */}
+        <div style={{ padding: "16px 12px", borderTop: "1px solid #222222" }}>
+          <Link href="/" style={{
+            display: "flex", alignItems: "center", gap: "10px",
+            padding: "10px 14px", borderRadius: "10px",
+            textDecoration: "none",
+            color: "rgba(255,255,255,0.25)",
+            fontSize: "13px", fontWeight: 500,
+            transition: "all 0.15s",
+          }}>
+            <ArrowLeft size={15} />
             Volver al sitio
           </Link>
         </div>
       </aside>
 
       {/* Contenido */}
-      <main className="ml-64 flex-1 p-8 pt-8">
+      <main style={{
+        marginLeft: "220px",
+        flex: 1,
+        padding: "48px",
+        backgroundColor: "#0a0a0a",
+        minHeight: "100vh",
+      }}>
         {children}
       </main>
     </div>

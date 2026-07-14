@@ -28,43 +28,39 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-      scrolled
-        ? "bg-black/90 backdrop-blur-md border-b border-white/10"
-        : "bg-transparent"
-    )}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="relative flex items-center justify-between h-20">
+    <nav
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+        scrolled
+          ? "bg-black/90 backdrop-blur-md border-b border-white/10"
+          : "bg-transparent"
+      )}
+    >
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 32px" }}>
+        <div style={{ display: "flex", alignItems: "center", height: "80px", position: "relative" }}>
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 w-52">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-emerald-700">
-              <MapPin className="w-4 h-4 text-white" />
+          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", minWidth: "220px" }}>
+            <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#15803d", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <MapPin size={16} color="white" />
             </div>
-            <span className="font-semibold text-lg tracking-tight text-white">
-              Descubre <span className="text-emerald-400">Santander</span>
+            <span style={{ fontSize: "16px", fontWeight: 600, color: "white", letterSpacing: "-0.3px" }}>
+              Descubre <span style={{ color: "#6ee7b7" }}>Santander</span>
             </span>
           </Link>
 
-          {/* Links — centro */}
-          <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2 translate-x-16">
+          {/* Links — centro absoluto */}
+          <div style={{
+            position: "absolute", left: "50%", transform: "translateX(-50%)",
+            display: "flex", alignItems: "center", gap: "36px",
+          }} className="hidden md:flex">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  transition: "color 0.2s",
-                  color: "rgba(255,255,255,0.85)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#ffffff"
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "rgba(255,255,255,0.85)"
-                }}
+                style={{ fontSize: "14px", fontWeight: 600, color: "rgba(255,255,255,0.8)", textDecoration: "none", transition: "color 0.2s" }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff" }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.8)" }}
               >
                 {link.label}
               </Link>
@@ -72,60 +68,69 @@ export default function Navbar() {
           </div>
 
           {/* Botones — derecha */}
-          <div className="hidden md:flex items-center gap-3 w-52 justify-end">
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "12px" }} className="hidden md:flex">
             {session ? (
-              <div className="relative">
+              <div style={{ position: "relative" }}>
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 backdrop-blur-sm hover:bg-white/25 text-white transition-all"
+                  style={{
+                    display: "flex", alignItems: "center", gap: "8px",
+                    padding: "8px 14px", borderRadius: "20px",
+                    background: "rgba(255,255,255,0.12)", backdropFilter: "blur(8px)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    color: "white", cursor: "pointer", fontSize: "13px", fontWeight: 500,
+                  }}
                 >
                   {session.user?.image ? (
-                    <Image
-                      src={session.user.image}
-                      alt={session.user.name ?? "Usuario"}
-                      width={24}
-                      height={24}
-                      className="rounded-full"
-                    />
+                    <Image src={session.user.image} alt={session.user.name ?? "U"} width={22} height={22} style={{ borderRadius: "50%" }} />
                   ) : (
-                    <User className="w-4 h-4" />
+                    <User size={16} />
                   )}
-                  <span className="text-sm font-medium">
-                    {session.user?.name?.split(" ")[0]}
-                  </span>
-                  <ChevronDown className="w-3 h-3" />
+                  {session.user?.name?.split(" ")[0]}
+                  <ChevronDown size={12} />
                 </button>
 
                 {showUserMenu && (
-                  <div className="absolute right-0 top-12 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 w-52 z-50">
-                    <div className="px-4 py-3 border-b border-gray-100">
-                      <div className="text-sm font-semibold text-gray-900">{session.user?.name}</div>
-                      <div className="text-xs text-gray-500">{session.user?.email}</div>
+                  <div style={{
+                    position: "absolute", right: 0, top: "48px",
+                    background: "#1a1a1a", borderRadius: "16px",
+                    border: "1px solid #2a2a2a",
+                    boxShadow: "0 20px 40px rgba(0,0,0,0.6)",
+                    padding: "8px", width: "220px", zIndex: 50,
+                  }}>
+                    <div style={{ padding: "12px 14px", borderBottom: "1px solid #2a2a2a", marginBottom: "4px" }}>
+                      <div style={{ color: "white", fontSize: "13px", fontWeight: 600 }}>{session.user?.name}</div>
+                      <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px" }}>{session.user?.email}</div>
                     </div>
-                    <Link
-                      href="/favoritos"
-                      onClick={() => setShowUserMenu(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <Heart className="w-4 h-4 text-red-400" />
+                    <Link href="/favoritos" onClick={() => setShowUserMenu(false)} style={{
+                      display: "flex", alignItems: "center", gap: "10px",
+                      padding: "10px 14px", borderRadius: "10px",
+                      textDecoration: "none", color: "rgba(255,255,255,0.6)",
+                      fontSize: "13px", fontWeight: 500,
+                    }}>
+                      <Heart size={14} color="#f87171" />
                       Mis favoritos
                     </Link>
                     {session.user?.role === "ADMIN" && (
-                      <Link
-                        href="/admin"
-                        onClick={() => setShowUserMenu(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                      >
-                        <Settings className="w-4 h-4 text-gray-400" />
+                      <Link href="/admin" onClick={() => setShowUserMenu(false)} style={{
+                        display: "flex", alignItems: "center", gap: "10px",
+                        padding: "10px 14px", borderRadius: "10px",
+                        textDecoration: "none", color: "rgba(255,255,255,0.6)",
+                        fontSize: "13px", fontWeight: 500,
+                      }}>
+                        <Settings size={14} color="rgba(255,255,255,0.4)" />
                         Panel admin
                       </Link>
                     )}
-                    <div className="border-t border-gray-100 mt-1 pt-1">
-                      <button
-                        onClick={() => signOut({ callbackUrl: "/" })}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors w-full text-left"
-                      >
-                        <LogOut className="w-4 h-4" />
+                    <div style={{ borderTop: "1px solid #2a2a2a", marginTop: "4px", paddingTop: "4px" }}>
+                      <button onClick={() => signOut({ callbackUrl: "/" })} style={{
+                        display: "flex", alignItems: "center", gap: "10px",
+                        padding: "10px 14px", borderRadius: "10px",
+                        color: "#f87171", fontSize: "13px", fontWeight: 500,
+                        background: "none", border: "none", cursor: "pointer",
+                        width: "100%", textAlign: "left",
+                      }}>
+                        <LogOut size={14} />
                         Cerrar sesión
                       </button>
                     </div>
@@ -135,64 +140,71 @@ export default function Navbar() {
             ) : (
               <>
                 <Link
-                  href="/auth/login"
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    color: "rgba(255,255,255,0.9)",
-                    transition: "color 0.2s",
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = "#ffffff"}
-                  onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.9)"}
-                >
-                  Iniciar sesión
-                </Link>
-                <Link
-                  href="/auth/login"
-                  className="bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors"
-                >
-                  Registrarse
-                </Link>
+  href="/auth/login"
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#16a34a",
+    color: "white",
+    fontSize: "14px",
+    fontWeight: 600,
+    padding: "11px 24px",
+    borderRadius: "999px",
+    textDecoration: "none",
+    transition: "all .25s ease",
+    boxShadow: "0 8px 25px rgba(22,163,74,.25)"
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.background = "#22c55e"
+    e.currentTarget.style.transform = "translateY(-2px)"
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.background = "#16a34a"
+    e.currentTarget.style.transform = "translateY(0)"
+  }}
+>
+  Iniciar sesión
+</Link>
               </>
             )}
           </div>
 
-          {/* Botón menú móvil */}
+          {/* Botón móvil */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg text-white hover:bg-white/10 transition-colors"
+            style={{ marginLeft: "auto", background: "none", border: "none", color: "white", cursor: "pointer", padding: "8px" }}
+            className="md:hidden"
           >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
       {/* Menú móvil */}
       <div className={cn(
-        "md:hidden bg-black/95 border-t border-white/10 transition-all duration-300",
+        "md:hidden border-t border-white/10 transition-all duration-300",
         isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
-      )}>
-        <div className="px-6 py-4 flex flex-col gap-4">
+      )} style={{ background: "rgba(10,10,10,0.98)" }}>
+        <div style={{ padding: "16px 24px", display: "flex", flexDirection: "column", gap: "4px" }}>
           {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-              className="text-white/80 hover:text-white font-medium py-2 transition-colors"
-            >
+            <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)} style={{
+              color: "rgba(255,255,255,0.7)", fontWeight: 500, padding: "10px 0",
+              textDecoration: "none", fontSize: "15px",
+            }}>
               {link.label}
             </Link>
           ))}
-          <div className="border-t border-white/10 pt-4 flex flex-col gap-3">
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", marginTop: "8px", paddingTop: "12px", display: "flex", flexDirection: "column", gap: "8px" }}>
             {session ? (
               <>
-                <Link href="/favoritos" onClick={() => setIsOpen(false)} className="text-white/80 font-medium py-2">Mis favoritos</Link>
-                <button onClick={() => signOut({ callbackUrl: "/" })} className="text-red-400 font-medium py-2 text-left">Cerrar sesión</button>
+                <Link href="/favoritos" onClick={() => setIsOpen(false)} style={{ color: "rgba(255,255,255,0.7)", fontWeight: 500, padding: "8px 0", textDecoration: "none" }}>Mis favoritos</Link>
+                <button onClick={() => signOut({ callbackUrl: "/" })} style={{ color: "#f87171", fontWeight: 500, padding: "8px 0", background: "none", border: "none", cursor: "pointer", textAlign: "left", fontSize: "15px" }}>Cerrar sesión</button>
               </>
             ) : (
               <>
-                <Link href="/auth/login" onClick={() => setIsOpen(false)} className="text-white/80 font-medium py-2">Iniciar sesión</Link>
-                <Link href="/auth/login" onClick={() => setIsOpen(false)} className="bg-emerald-700 text-white font-medium px-5 py-2.5 rounded-full text-center">Registrarse</Link>
+                <Link href="/auth/login" onClick={() => setIsOpen(false)} style={{ color: "rgba(255,255,255,0.7)", fontWeight: 500, padding: "8px 0", textDecoration: "none" }}>Iniciar sesión</Link>
+                <Link href="/auth/login" onClick={() => setIsOpen(false)} style={{ background: "#15803d", color: "white", fontWeight: 600, padding: "10px 20px", borderRadius: "20px", textAlign: "center", textDecoration: "none" }}>Registrarse</Link>
               </>
             )}
           </div>

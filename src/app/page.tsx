@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma"
-import HeroSection from "@/components/home/HeroSection"
 import CategoriesSection from "@/components/home/CategoriesSection"
 import FeaturedPlaces from "@/components/home/FeaturedPlaces"
 
@@ -14,11 +13,8 @@ export default async function Home() {
   ])
 
   return (
-    <div style={{ backgroundColor: "#0a0a0a"  }}>
-      <HeroSection />
-      <div style={{ height: "80px", backgroundColor: "#0a0a0a"  }} />
+    <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh", paddingTop: "100px" }}>
       <CategoriesSection categories={categories} />
-      <div style={{ height: "32px", backgroundColor: "#0a0a0a" }} />
       <FeaturedPlaces places={featuredPlaces} />
     </div>
   )

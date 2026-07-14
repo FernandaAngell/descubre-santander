@@ -2,9 +2,16 @@ import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import { MapPin, Star, Clock, Phone } from "lucide-react"
 import Link from "next/link"
+import ReviewForm from "@/components/ReviewForm"
 
 interface Props {
   params: Promise<{ slug: string }>
+}
+
+const restaurantImages: Record<string, string> = {
+  "restaurante-barichara-plaza": "https://res.cloudinary.com/dxalbznya/image/upload/v1782422294/casona_e178vc.png",
+  "restaurante-leal-bucaramanga": "https://res.cloudinary.com/dxalbznya/image/upload/v1782422310/El_Viejo_Chiflas_Restaurante_Bucaramanga_Santander_4_94e75935ab_nqva1p.jpg",
+  "restaurante-san-gil-aventura": "https://res.cloudinary.com/dxalbznya/image/upload/v1782422328/gringo-mike-s_cfyrxu.jpg",
 }
 
 export default async function RestauranteDetailPage({ params }: Props) {
@@ -22,83 +29,123 @@ export default async function RestauranteDetailPage({ params }: Props) {
     },
   })
 
-  if (!restaurant || restaurant.status !== "PUBLISHED") {
-    notFound()
-  }
+  if (!restaurant || restaurant.status !== "PUBLISHED") notFound()
+
+  const heroImage = restaurantImages[restaurant.slug] || ""
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh" }}>
 
       {/* Hero */}
-      <div className="h-72 md:h-96 bg-gradient-to-br from-orange-500 to-red-700 relative flex items-end">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-9xl opacity-20">🍽️</span>
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 pb-8 w-full">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white">
-              {restaurant.foodType}
-            </span>
-            {restaurant.rating > 0 && (
-              <span className="flex items-center gap-1 text-xs font-semibold px-3 py-1 rounded-full bg-yellow-400 text-yellow-900">
-                <Star className="w-3 h-3 fill-yellow-900" />
-                {restaurant.rating.toFixed(1)}
+      <div style={{ position: "relative", height: "70vh", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: heroImage ? `url('${heroImage}')` : undefined,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundColor: "#1a1a1a",
+        }} />
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, #0a0a0a 100%)",
+        }} />
+
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0 24px 48px" }}>
+          <div style={{ maxWidth: "1152px", margin: "0 auto" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
+              <span style={{
+                background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)",
+                border: "0.5px solid rgba(255,255,255,0.25)",
+                color: "white", fontSize: "12px", fontWeight: 600,
+                padding: "5px 12px", borderRadius: "20px",
+              }}>
+                {restaurant.foodType}
               </span>
-            )}
-          </div>
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">
-            {restaurant.name}
-          </h1>
-          <div className="flex items-center gap-2 text-white/80">
-            <MapPin className="w-4 h-4" />
-            <span>{restaurant.municipality.name}, Santander</span>
+              {restaurant.rating > 0 && (
+                <span style={{
+                  display: "flex", alignItems: "center", gap: "5px",
+                  background: "rgba(251,191,36,0.15)", backdropFilter: "blur(8px)",
+                  border: "0.5px solid rgba(251,191,36,0.3)",
+                  color: "#fbbf24", fontSize: "12px", fontWeight: 700,
+                  padding: "5px 12px", borderRadius: "20px",
+                }}>
+                  <Star size={12} fill="#fbbf24" />
+                  {restaurant.rating.toFixed(1)}
+                </span>
+              )}
+            </div>
+            <h1 style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(36px, 6vw, 64px)",
+              fontWeight: 700, color: "white",
+              margin: "0 0 12px", lineHeight: 1,
+            }}>
+              {restaurant.name}
+            </h1>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "rgba(255,255,255,0.55)", fontSize: "14px" }}>
+              <MapPin size={14} />
+              <span>{restaurant.municipality.name}, Santander</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <div className="flex flex-col lg:flex-row gap-8">
+      {/* Contenido */}
+      <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px 120px" }}>
+        <div style={{ display: "flex", gap: "48px" }}>
 
-          {/* Contenido principal */}
-          <div className="flex-1">
+          {/* Principal */}
+          <div style={{ flex: 1 }}>
 
             {/* Info rápida */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-                <div className="text-xs text-gray-500 mb-1">Precio promedio</div>
-                <div className="text-sm font-semibold text-gray-900">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "32px" }}>
+              <div style={{ background: "#1a1a1a", borderRadius: "12px", padding: "16px", border: "1px solid #2a2a2a" }}>
+                <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", marginBottom: "6px" }}>Precio promedio</div>
+                <div style={{ color: "white", fontWeight: 700, fontSize: "14px" }}>
                   ${restaurant.priceAvg.toLocaleString("es-CO")} por persona
                 </div>
               </div>
               {restaurant.schedule && (
-                <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-                  <div className="text-xs text-gray-500 mb-1">Horario</div>
-                  <div className="text-sm font-semibold text-gray-900">{restaurant.schedule}</div>
+                <div style={{ background: "#1a1a1a", borderRadius: "12px", padding: "16px", border: "1px solid #2a2a2a" }}>
+                  <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", marginBottom: "6px" }}>Horario</div>
+                  <div style={{ color: "white", fontWeight: 700, fontSize: "12px", lineHeight: 1.4 }}>{restaurant.schedule}</div>
                 </div>
               )}
               {restaurant.address && (
-                <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-                  <div className="text-xs text-gray-500 mb-1">Dirección</div>
-                  <div className="text-sm font-semibold text-gray-900 line-clamp-2">{restaurant.address}</div>
+                <div style={{ background: "#1a1a1a", borderRadius: "12px", padding: "16px", border: "1px solid #2a2a2a" }}>
+                  <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", marginBottom: "6px" }}>Dirección</div>
+                  <div style={{ color: "white", fontWeight: 700, fontSize: "12px", lineHeight: 1.4 }}>{restaurant.address}</div>
                 </div>
               )}
             </div>
 
             {/* Descripción */}
             {restaurant.description && (
-              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Sobre este restaurante</h2>
-                <p className="text-gray-600 leading-relaxed">{restaurant.description}</p>
+              <div style={{ background: "#1a1a1a", borderRadius: "16px", padding: "28px", border: "1px solid #2a2a2a", marginBottom: "20px" }}>
+                <h2 style={{ fontFamily: "var(--font-display)", color: "white", fontSize: "20px", fontWeight: 700, marginBottom: "16px" }}>
+                  Sobre este restaurante
+                </h2>
+                <p style={{ color: "rgba(255,255,255,0.6)", lineHeight: 1.8, fontSize: "15px", margin: 0 }}>
+                  {restaurant.description}
+                </p>
               </div>
             )}
 
             {/* Especialidades */}
             {restaurant.specialties.length > 0 && (
-              <div className="bg-orange-50 rounded-2xl p-6 border border-orange-100 mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Especialidades</h2>
-                <div className="flex flex-wrap gap-2">
+              <div style={{ background: "#0f2318", borderRadius: "16px", padding: "28px", border: "1px solid #1a3d2b", marginBottom: "20px" }}>
+                <h2 style={{ fontFamily: "var(--font-display)", color: "white", fontSize: "20px", fontWeight: 700, marginBottom: "20px" }}>
+                  Especialidades
+                </h2>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                   {restaurant.specialties.map((s, i) => (
-                    <span key={i} className="bg-white text-orange-700 border border-orange-200 text-sm font-medium px-4 py-2 rounded-xl">
+                    <span key={i} style={{
+                      background: "#1a2e1f",
+                      border: "1px solid #2a4a2e",
+                      color: "#6ee7b7",
+                      fontSize: "13px", fontWeight: 500,
+                      padding: "8px 16px", borderRadius: "20px",
+                    }}>
                       {s}
                     </span>
                   ))}
@@ -107,88 +154,102 @@ export default async function RestauranteDetailPage({ params }: Props) {
             )}
 
             {/* Reseñas */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
+            <div style={{ background: "#1a1a1a", borderRadius: "16px", padding: "28px", border: "1px solid #2a2a2a" }}>
+              <h2 style={{ fontFamily: "var(--font-display)", color: "white", fontSize: "20px", fontWeight: 700, marginBottom: "20px" }}>
                 Reseñas {restaurant.reviews.length > 0 && `(${restaurant.reviews.length})`}
               </h2>
               {restaurant.reviews.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <div className="text-4xl mb-3">💬</div>
-                  <p>Aún no hay reseñas. ¡Sé el primero!</p>
+                <div style={{ textAlign: "center", padding: "32px 0", color: "rgba(255,255,255,0.3)" }}>
+                  <div style={{ fontSize: "36px", marginBottom: "12px" }}>💬</div>
+                  <p style={{ margin: 0 }}>Aún no hay reseñas. ¡Sé el primero!</p>
                 </div>
               ) : (
-                <div className="flex flex-col gap-4">
+                <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginBottom: "24px" }}>
                   {restaurant.reviews.map((review) => (
-                    <div key={review.id} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-orange-700 font-semibold text-sm">
+                    <div key={review.id} style={{ borderBottom: "1px solid #2a2a2a", paddingBottom: "16px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
+                        <div style={{
+                          width: "32px", height: "32px", background: "#1a2e1f",
+                          borderRadius: "50%", display: "flex", alignItems: "center",
+                          justifyContent: "center", color: "#6ee7b7", fontWeight: 700, fontSize: "13px",
+                        }}>
                           {review.user.name?.[0] ?? "U"}
                         </div>
                         <div>
-                          <div className="font-medium text-gray-900 text-sm">{review.user.name}</div>
-                          <div className="text-yellow-500 text-xs">{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</div>
+                          <div style={{ color: "white", fontSize: "13px", fontWeight: 600 }}>{review.user.name}</div>
+                          <div style={{ color: "#fbbf24", fontSize: "12px" }}>{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</div>
                         </div>
                       </div>
-                      <p className="text-gray-600 text-sm">{review.comment}</p>
+                      <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "14px", margin: 0, lineHeight: 1.6 }}>{review.comment}</p>
                     </div>
                   ))}
                 </div>
               )}
+              <ReviewForm restaurantId={restaurant.id} />
             </div>
           </div>
 
           {/* Sidebar */}
-          <div className="lg:w-80 shrink-0">
+          <div style={{ width: "300px", flexShrink: 0 }}>
 
             {/* Contacto */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm mb-6">
-              <h3 className="font-bold text-gray-900 mb-4">Información de contacto</h3>
-
+            <div style={{ background: "#1a1a1a", borderRadius: "16px", padding: "24px", border: "1px solid #2a2a2a", marginBottom: "16px" }}>
+              <h3 style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", marginBottom: "16px" }}>
+                Contacto
+              </h3>
               {restaurant.phone && (
-                <a
-                  href={`tel:${restaurant.phone}`}
-                  className="w-full flex items-center gap-3 bg-orange-600 hover:bg-orange-700 text-white font-medium py-3 px-4 rounded-xl transition-colors mb-3"
-                >
-                  <Phone className="w-4 h-4" />
+                <a href={`tel:${restaurant.phone}`} style={{
+                  display: "flex", alignItems: "center", gap: "10px",
+                  background: "#15803d", color: "white", fontWeight: 600,
+                  padding: "13px 16px", borderRadius: "12px", textDecoration: "none",
+                  fontSize: "14px", marginBottom: "10px",
+                }}>
+                  <Phone size={16} />
                   {restaurant.phone}
                 </a>
               )}
-
               {restaurant.schedule && (
-                <div className="flex items-start gap-3 text-sm text-gray-600 mt-3">
-                  <Clock className="w-4 h-4 shrink-0 mt-0.5 text-gray-400" />
-                  <span>{restaurant.schedule}</span>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginTop: "12px" }}>
+                  <Clock size={14} color="rgba(255,255,255,0.3)" style={{ marginTop: "1px", flexShrink: 0 }} />
+                  <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", lineHeight: 1.5 }}>{restaurant.schedule}</span>
                 </div>
               )}
-
               {restaurant.address && (
-                <div className="flex items-start gap-3 text-sm text-gray-600 mt-3">
-                  <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-gray-400" />
-                  <span>{restaurant.address}</span>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginTop: "12px" }}>
+                  <MapPin size={14} color="rgba(255,255,255,0.3)" style={{ marginTop: "1px", flexShrink: 0 }} />
+                  <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", lineHeight: 1.5 }}>{restaurant.address}</span>
                 </div>
               )}
             </div>
 
             {/* Municipio */}
-            <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm mb-6">
-              <h3 className="font-bold text-gray-900 mb-3">Municipio</h3>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-orange-600" />
+            <div style={{ background: "#1a1a1a", borderRadius: "16px", padding: "20px", border: "1px solid #2a2a2a", marginBottom: "16px" }}>
+              <h3 style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", marginBottom: "16px" }}>
+                Municipio
+              </h3>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <div style={{
+                  width: "40px", height: "40px", background: "#0f2318",
+                  borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  <MapPin size={18} color="#6ee7b7" />
                 </div>
                 <div>
-                  <div className="font-semibold text-gray-900">{restaurant.municipality.name}</div>
+                  <div style={{ color: "white", fontWeight: 700, fontSize: "15px" }}>{restaurant.municipality.name}</div>
                   {restaurant.municipality.weather && (
-                    <div className="text-xs text-gray-500">{restaurant.municipality.weather}</div>
+                    <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px" }}>{restaurant.municipality.weather}</div>
                   )}
                 </div>
               </div>
             </div>
 
-            <Link
-              href="/restaurantes"
-              className="block text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-6 py-3 rounded-xl transition-colors"
-            >
+            {/* Volver */}
+            <Link href="/restaurantes" style={{
+              display: "block", textAlign: "center",
+              color: "rgba(255,255,255,0.4)", fontSize: "13px", fontWeight: 600,
+              textDecoration: "none", padding: "12px",
+              background: "#1a1a1a", borderRadius: "12px", border: "1px solid #2a2a2a",
+            }}>
               ← Volver a restaurantes
             </Link>
           </div>

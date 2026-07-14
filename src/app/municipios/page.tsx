@@ -1,6 +1,15 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
-import { MapPin, Mountain, Thermometer, Users } from "lucide-react"
+import { Mountain, Thermometer } from "lucide-react"
+
+const municipioImages: Record<string, string> = {
+  "bucaramanga": "https://res.cloudinary.com/dxalbznya/image/upload/v1782423085/bucaramanga_knvql7.avif",
+  "floridablanca": "https://res.cloudinary.com/dxalbznya/image/upload/v1782423044/floridabalnca_gumvyl.jpg",
+  "giron": "https://res.cloudinary.com/dxalbznya/image/upload/v1782423024/giron_z3zo9z.jpg",
+  "barichara": "https://res.cloudinary.com/dxalbznya/image/upload/v1782423109/barichara_nvnfci.webp",
+  "san-gil": "https://res.cloudinary.com/dxalbznya/image/upload/v1782422989/san_gil_sfdnfx.jpg",
+  "curiti": "https://res.cloudinary.com/dxalbznya/image/upload/v1782423067/curiti_y1qlxd.jpg",
+}
 
 export default async function MunicipiosPage() {
   const municipalities = await prisma.municipality.findMany({
@@ -17,79 +26,101 @@ export default async function MunicipiosPage() {
   })
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh", paddingTop: "80px" }}>
 
       {/* Header */}
-      <div className="bg-teal-800 text-white py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Municipios</h1>
-          <p className="text-teal-200 text-lg">
-            Explora los {municipalities.length} municipios de Santander
-          </p>
-        </div>
+      <div style={{ padding: "60px 24px 48px", maxWidth: "1152px", margin: "0 auto" }}>
+        <p style={{ color: "#6ee7b7", fontSize: "11px", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", marginBottom: "12px" }}>
+          Santander, Colombia
+        </p>
+        <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 6vw, 64px)", fontWeight: 700, color: "#ffffff", margin: "0 0 16px", lineHeight: 1 }}>
+          Municipios
+        </h1>
+        <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "16px", margin: 0 }}>
+          Explora los {municipalities.length} municipios de Santander
+        </p>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px 120px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
           {municipalities.map((mun) => (
             <Link
               key={mun.id}
               href={`/municipios/${mun.slug}`}
-              className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+              style={{
+                position: "relative",
+                overflow: "hidden",
+                borderRadius: "16px",
+                display: "block",
+                textDecoration: "none",
+                aspectRatio: "4/3",
+              }}
             >
               {/* Imagen */}
-              <div className="h-44 bg-gradient-to-br from-teal-500 to-emerald-700 relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-7xl opacity-20">🏔️</span>
-                </div>
-                <div className="absolute bottom-3 left-3">
-                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/90 text-teal-700">
-                    {mun.department}
-                  </span>
-                </div>
+              <div style={{
+                position: "absolute", inset: 0,
+                backgroundImage: `url('${municipioImages[mun.slug] || ""}')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundColor: "#1a2e1f",
+                transition: "transform 0.7s ease",
+              }} />
+
+              {/* Overlay */}
+              <div style={{
+                position: "absolute", inset: 0,
+                background: "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%)",
+              }} />
+
+              {/* Badge */}
+              <div style={{ position: "absolute", top: "12px", left: "12px" }}>
+                <span style={{
+                  background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)",
+                  border: "0.5px solid rgba(255,255,255,0.25)",
+                  color: "white", fontSize: "11px", fontWeight: 600,
+                  padding: "4px 10px", borderRadius: "20px",
+                }}>
+                  {mun.department}
+                </span>
               </div>
 
-              {/* Contenido */}
-              <div className="p-5">
-                <h3 className="font-bold text-gray-900 text-xl mb-1 group-hover:text-teal-600 transition-colors">
+              {/* Info */}
+              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px" }}>
+                <h3 style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "22px", fontWeight: 700,
+                  color: "white", margin: "0 0 6px",
+                }}>
                   {mun.name}
                 </h3>
 
-                {/* Stats */}
-                <div className="flex items-center gap-4 my-3">
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                   {mun.altitude && (
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
-                      <Mountain className="w-3.5 h-3.5" />
+                    <div style={{ display: "flex", alignItems: "center", gap: "4px", color: "rgba(255,255,255,0.5)", fontSize: "11px" }}>
+                      <Mountain size={11} />
                       <span>{mun.altitude}m</span>
                     </div>
                   )}
                   {mun.weather && (
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
-                      <Thermometer className="w-3.5 h-3.5" />
+                    <div style={{ display: "flex", alignItems: "center", gap: "4px", color: "rgba(255,255,255,0.5)", fontSize: "11px" }}>
+                      <Thermometer size={11} />
                       <span>{mun.weather}</span>
                     </div>
                   )}
                 </div>
 
-                {mun.description && (
-                  <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed mb-4">
-                    {mun.description}
-                  </p>
-                )}
-
-                {/* Conteos */}
-                <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
-                  <div className="text-center">
-                    <div className="font-bold text-gray-900">{mun._count.places}</div>
-                    <div className="text-xs text-gray-500">Lugares</div>
+                <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ color: "#6ee7b7", fontWeight: 700, fontSize: "16px" }}>{mun._count.places}</div>
+                    <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", textTransform: "uppercase", letterSpacing: "1px" }}>Lugares</div>
                   </div>
-                  <div className="text-center">
-                    <div className="font-bold text-gray-900">{mun._count.accommodations}</div>
-                    <div className="text-xs text-gray-500">Alojamientos</div>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ color: "#6ee7b7", fontWeight: 700, fontSize: "16px" }}>{mun._count.accommodations}</div>
+                    <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", textTransform: "uppercase", letterSpacing: "1px" }}>Alojamientos</div>
                   </div>
-                  <div className="text-center">
-                    <div className="font-bold text-gray-900">{mun._count.restaurants}</div>
-                    <div className="text-xs text-gray-500">Restaurantes</div>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ color: "#6ee7b7", fontWeight: 700, fontSize: "16px" }}>{mun._count.restaurants}</div>
+                    <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", textTransform: "uppercase", letterSpacing: "1px" }}>Restaurantes</div>
                   </div>
                 </div>
               </div>

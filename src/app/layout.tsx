@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Inter, Playfair_Display } from "next/font/google"
 import "./globals.css"
-import Navbar from "@/components/Navbar"
+import NavbarWrapper from "@/components/NavbarWrapper"
 import AuthProvider from "@/components/auth/AuthProvider"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -25,13 +25,11 @@ export default function RootLayout({
     <html lang="es">
       <body
         className={`${inter.className} ${playfair.variable}`}
-        style={{ backgroundColor: "#ffffff", margin: 0, padding: 0 }}
+        style={{ backgroundColor: "#0a0a0a", margin: 0, padding: 0, color: "#111827" }}
       >
         <AuthProvider>
-          <Navbar />
-          <main style={{ backgroundColor: "#ffffff" }}>
-            {children}
-          </main>
+          <NavbarWrapper />
+          {children}
         </AuthProvider>
       </body>
     </html>
