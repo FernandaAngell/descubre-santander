@@ -235,13 +235,13 @@ export default function Navbar() {
             {session ? (
               <>
                 <Link 
-                  href="/favoritos" 
-                  onClick={() => setIsOpen(false)} 
-                  className="flex items-center gap-3 text-[15px] font-medium text-white/70 hover:text-white hover:bg-white/5 px-3 py-2.5 rounded-xl transition-all"
-                >
-                  <Heart size={16} className="text-red-400" />
-                  Mis favoritos
-                </Link>
+  href="/favoritos" 
+  onClick={() => setIsOpen(false)} 
+  className="flex items-center gap-3 text-[15px] font-medium text-white hover:text-emerald-400 hover:bg-white/5 px-3 py-2.5 rounded-xl transition-all"
+>
+  <Heart size={16} className="text-red-400" />
+  Mis favoritos
+</Link>
                 
                 {/* Panel de administrador en menú móvil */}
                 {session.user?.role === "ADMIN" && (
