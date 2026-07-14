@@ -30,8 +30,11 @@ export default async function FavoritosPage() {
   return (
     <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh", paddingTop: "80px" }}>
 
-      {/* Header */}
-      <div style={{ padding: "60px 24px 48px", maxWidth: "1152px", margin: "0 auto" }}>
+      {/* Header con padding responsivo */}
+      <div 
+        className="px-6 pt-12 pb-8 md:pt-[60px] md:pb-[48px]"
+        style={{ maxWidth: "1152px", margin: "0 auto" }}
+      >
         <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
           <Heart size={24} color="#f87171" fill="#f87171" />
           <p style={{ color: "#6ee7b7", fontSize: "11px", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", margin: 0 }}>
@@ -46,7 +49,11 @@ export default async function FavoritosPage() {
         </p>
       </div>
 
-      <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px 120px" }}>
+      {/* Contenedor de contenido con padding responsivo */}
+      <div 
+        className="px-6 pb-20 md:pb-[120px]"
+        style={{ maxWidth: "1152px", margin: "0 auto" }}
+      >
         {favorites.length === 0 ? (
           <div style={{ textAlign: "center", padding: "80px 0" }}>
             <Heart size={64} color="rgba(255,255,255,0.1)" style={{ marginBottom: "24px" }} />
@@ -65,7 +72,8 @@ export default async function FavoritosPage() {
             </Link>
           </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+          /* Grid Adaptable: 1 columna en móvil, 2 en tablets (sm) y 3 en ordenadores (lg) */
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {favorites.map((fav) => (
               <Link
                 key={fav.id}

@@ -28,8 +28,11 @@ export default async function MunicipiosPage() {
   return (
     <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh", paddingTop: "80px" }}>
 
-      {/* Header */}
-      <div style={{ padding: "60px 24px 48px", maxWidth: "1152px", margin: "0 auto" }}>
+      {/* Header con padding responsivo */}
+      <div 
+        className="px-6 pt-12 pb-8 md:pt-[60px] md:pb-[48px]"
+        style={{ maxWidth: "1152px", margin: "0 auto" }}
+      >
         <p style={{ color: "#6ee7b7", fontSize: "11px", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", marginBottom: "12px" }}>
           Santander, Colombia
         </p>
@@ -41,8 +44,13 @@ export default async function MunicipiosPage() {
         </p>
       </div>
 
-      <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px 120px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+      {/* Contenedor de contenido con padding responsivo */}
+      <div 
+        className="px-6 pb-20 md:pb-[120px]"
+        style={{ maxWidth: "1152px", margin: "0 auto" }}
+      >
+        {/* Grid Adaptable: 1 columna en móvil, 2 en tablets (sm) y 3 en ordenadores (lg) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {municipalities.map((mun) => (
             <Link
               key={mun.id}

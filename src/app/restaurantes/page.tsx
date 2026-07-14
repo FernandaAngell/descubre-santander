@@ -36,8 +36,11 @@ export default async function RestaurantesPage({ searchParams }: Props) {
   return (
     <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh", paddingTop: "80px" }}>
 
-      {/* Header */}
-      <div style={{ padding: "60px 24px 48px", maxWidth: "1152px", margin: "0 auto" }}>
+      {/* Header con padding responsivo */}
+      <div 
+        className="px-6 pt-12 pb-8 md:pt-[60px] md:pb-[48px]"
+        style={{ maxWidth: "1152px", margin: "0 auto" }}
+      >
         <p style={{ color: "#6ee7b7", fontSize: "11px", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", marginBottom: "12px" }}>
           Santander, Colombia
         </p>
@@ -49,21 +52,27 @@ export default async function RestaurantesPage({ searchParams }: Props) {
         </p>
       </div>
 
-      <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px 120px", display: "flex", gap: "40px" }}>
+      {/* Contenedor Principal con layout flexible (apilado en móvil, dividido en web) */}
+      <div 
+        className="px-6 pb-20 md:pb-[120px] flex flex-col md:flex-row gap-10 md:gap-8 lg:gap-[40px]"
+        style={{ maxWidth: "1152px", margin: "0 auto" }}
+      >
 
         {/* Sidebar */}
-        <aside style={{ width: "200px", flexShrink: 0 }}>
-          <div style={{ position: "sticky", top: "100px" }}>
+        <aside className="w-full md:w-[200px] md:flex-shrink-0">
+          <div className="md:sticky md:top-[100px]">
             <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", marginBottom: "12px" }}>
               Municipio
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+            {/* Lista: Desplazamiento horizontal en móvil, lista vertical en web */}
+            <div className="flex flex-row md:flex-col gap-1.5 overflow-x-auto md:overflow-x-visible pb-3 md:pb-0 scrollbar-none whitespace-nowrap">
               <Link href="/restaurantes" style={{
                 padding: "8px 12px", borderRadius: "8px", fontSize: "13px", fontWeight: 500,
                 textDecoration: "none",
                 background: !municipio ? "#1a2e1f" : "transparent",
                 color: !municipio ? "#6ee7b7" : "rgba(255,255,255,0.5)",
                 border: !municipio ? "1px solid #2a4a2e" : "1px solid transparent",
+                flexShrink: 0,
               }}>
                 Todos
               </Link>
@@ -74,6 +83,7 @@ export default async function RestaurantesPage({ searchParams }: Props) {
                   background: municipio === mun.slug ? "#1a2e1f" : "transparent",
                   color: municipio === mun.slug ? "#6ee7b7" : "rgba(255,255,255,0.5)",
                   border: municipio === mun.slug ? "1px solid #2a4a2e" : "1px solid transparent",
+                  flexShrink: 0,
                 }}>
                   {mun.name}
                 </Link>
@@ -82,7 +92,7 @@ export default async function RestaurantesPage({ searchParams }: Props) {
           </div>
         </aside>
 
-        {/* Grid */}
+        {/* Grid de Contenido */}
         <div style={{ flex: 1 }}>
           <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "13px", marginBottom: "24px" }}>
             <span style={{ color: "white", fontWeight: 600 }}>{restaurants.length}</span> restaurantes encontrados
@@ -102,7 +112,8 @@ export default async function RestaurantesPage({ searchParams }: Props) {
               </Link>
             </div>
           ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+            /* Grid Adaptable: 1 columna en móvil, 2 en tablets (sm) y 3 en ordenadores (lg) */
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {restaurants.map((r) => (
                 <RestaurantCard key={r.id} restaurant={r} />
               ))}

@@ -48,8 +48,11 @@ export default async function LugaresPage({ searchParams }: Props) {
   return (
     <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh", paddingTop: "80px" }}>
 
-      {/* Header */}
-      <div style={{ padding: "60px 24px 48px", maxWidth: "1152px", margin: "0 auto" }}>
+      {/* Header con paddings responsivos */}
+      <div 
+        className="px-6 pt-12 pb-8 md:pt-[60px] md:pb-[48px]"
+        style={{ maxWidth: "1152px", margin: "0 auto" }}
+      >
         <p style={{ color: "#6ee7b7", fontSize: "11px", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", marginBottom: "12px" }}>
           Santander, Colombia
         </p>
@@ -61,15 +64,21 @@ export default async function LugaresPage({ searchParams }: Props) {
         </p>
       </div>
 
-      <div style={{ maxWidth: "1152px", margin: "0 auto", padding: "0 24px 120px" }}>
-        <div style={{ display: "flex", gap: "40px" }}>
+      {/* Contenedor Principal */}
+      <div 
+        className="px-6 pb-20 md:pb-[120px]"
+        style={{ maxWidth: "1152px", margin: "0 auto" }}
+      >
+        {/* Layout: Se apila en vertical (flex-col) en móvil y se divide en escritorio (md:flex-row) */}
+        <div className="flex flex-col md:flex-row gap-10 md:gap-8 lg:gap-[40px]">
 
-          {/* Sidebar */}
-          <aside style={{ width: "220px", flexShrink: 0 }}>
-            <div style={{ position: "sticky", top: "100px" }}>
+          {/* Sidebar / Panel de Filtros */}
+          <aside className="w-full md:w-[220px] md:flex-shrink-0">
+            {/* Sticky solo activo a partir de resoluciones de escritorio */}
+            <div className="md:sticky md:top-[100px] flex flex-col gap-6 md:gap-8">
 
               {/* Buscador */}
-              <div style={{ marginBottom: "32px" }}>
+              <div>
                 <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", marginBottom: "12px" }}>
                   Buscar
                 </p>
@@ -111,12 +120,12 @@ export default async function LugaresPage({ searchParams }: Props) {
                 </form>
               </div>
 
-              {/* Categorías */}
-              <div style={{ marginBottom: "32px" }}>
+              {/* Categorías (Responsivo: Desplazamiento horizontal en celulares, lista vertical en web) */}
+              <div className="flex flex-col">
                 <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", marginBottom: "12px" }}>
                   Categoría
                 </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <div className="flex flex-row md:flex-col gap-1.5 overflow-x-auto md:overflow-x-visible pb-3 md:pb-0 scrollbar-none whitespace-nowrap">
                   <Link href="/lugares" style={{
                     padding: "8px 12px",
                     borderRadius: "8px",
@@ -126,6 +135,7 @@ export default async function LugaresPage({ searchParams }: Props) {
                     background: !categoria ? "#1a2e1f" : "transparent",
                     color: !categoria ? "#6ee7b7" : "rgba(255,255,255,0.5)",
                     border: !categoria ? "1px solid #2a4a2e" : "1px solid transparent",
+                    flexShrink: 0,
                   }}>
                     Todas
                   </Link>
@@ -145,6 +155,7 @@ export default async function LugaresPage({ searchParams }: Props) {
                         display: "flex",
                         alignItems: "center",
                         gap: "8px",
+                        flexShrink: 0,
                       }}
                     >
                       <span>{cat.icon}</span>
@@ -154,12 +165,12 @@ export default async function LugaresPage({ searchParams }: Props) {
                 </div>
               </div>
 
-              {/* Municipios */}
-              <div>
+              {/* Municipios (Responsivo: Desplazamiento horizontal en celulares, lista vertical en web) */}
+              <div className="flex flex-col">
                 <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", marginBottom: "12px" }}>
                   Municipio
                 </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <div className="flex flex-row md:flex-col gap-1.5 overflow-x-auto md:overflow-x-visible pb-3 md:pb-0 scrollbar-none whitespace-nowrap">
                   <Link href={categoria ? `/lugares?categoria=${categoria}` : "/lugares"} style={{
                     padding: "8px 12px",
                     borderRadius: "8px",
@@ -169,6 +180,7 @@ export default async function LugaresPage({ searchParams }: Props) {
                     background: !municipio ? "#1a2e1f" : "transparent",
                     color: !municipio ? "#6ee7b7" : "rgba(255,255,255,0.5)",
                     border: !municipio ? "1px solid #2a4a2e" : "1px solid transparent",
+                    flexShrink: 0,
                   }}>
                     Todos
                   </Link>
@@ -185,6 +197,7 @@ export default async function LugaresPage({ searchParams }: Props) {
                         background: municipio === mun.slug ? "#1a2e1f" : "transparent",
                         color: municipio === mun.slug ? "#6ee7b7" : "rgba(255,255,255,0.5)",
                         border: municipio === mun.slug ? "1px solid #2a4a2e" : "1px solid transparent",
+                        flexShrink: 0,
                       }}
                     >
                       {mun.name}
@@ -195,7 +208,7 @@ export default async function LugaresPage({ searchParams }: Props) {
             </div>
           </aside>
 
-          {/* Grid */}
+          {/* Grid de Destinos */}
           <div style={{ flex: 1 }}>
             <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "13px", marginBottom: "24px" }}>
               <span style={{ color: "white", fontWeight: 600 }}>{places.length}</span> lugares encontrados
@@ -223,7 +236,8 @@ export default async function LugaresPage({ searchParams }: Props) {
                 </Link>
               </div>
             ) : (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
+              /* Grid Adaptable: 1 columna en móvil, 2 en tablets (sm) y 3 en ordenadores (lg) */
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {places.map((place) => (
                   <PlaceCard key={place.id} place={place} />
                 ))}
