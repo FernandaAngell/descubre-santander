@@ -268,13 +268,13 @@ export default function Navbar() {
               </>
             ) : (
               <div className="flex flex-col gap-3 mt-1">
-                <Link 
-                  href="/auth/login" 
-                  onClick={() => setIsOpen(false)} 
-                  className="flex items-center justify-center text-[15px] font-medium text-white/70 hover:text-white border border-white/15 hover:border-white/30 px-4 py-2.5 rounded-full transition-all"
-                >
-                  Iniciar sesión
-                </Link>
+                <Link
+  href="/auth/login"
+  onClick={() => setIsOpen(false)}
+  className="flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[15px] font-semibold px-5 py-3 rounded-full transition-all duration-300 shadow-[0_8px_20px_rgba(16,185,129,0.2)] hover:shadow-[0_8px_20px_rgba(16,185,129,0.35)]"
+>
+  Iniciar sesión
+</Link>
               </div>
             )}
           </div>
