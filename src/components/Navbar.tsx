@@ -212,15 +212,22 @@ export default function Navbar() {
           {/* Enlaces de Navegación principales */}
           <div className="flex flex-col gap-1">
             {navLinks.map((link) => (
-              <Link 
-                key={link.href} 
-                href={link.href} 
-                onClick={() => setIsOpen(false)} 
-                className="text-[15px] font-medium text-white hover:bg-white/5 px-3 py-2.5 rounded-xl transition-all"
-              >
-                {link.label}
-              </Link>
-            ))}
+  <Link
+    key={link.href}
+    href={link.href}
+    onClick={() => setIsOpen(false)}
+    style={{
+      color: "#ffffff",
+      fontSize: "15px",
+      fontWeight: 500,
+      textDecoration: "none",
+      padding: "10px 12px",
+      borderRadius: "12px",
+    }}
+  >
+    {link.label}
+  </Link>
+))}
           </div>
 
           {/* Acciones adicionales del usuario / Autenticación */}
@@ -267,13 +274,6 @@ export default function Navbar() {
                   className="flex items-center justify-center text-[15px] font-medium text-white/70 hover:text-white border border-white/15 hover:border-white/30 px-4 py-2.5 rounded-full transition-all"
                 >
                   Iniciar sesión
-                </Link>
-                <Link 
-                  href="/auth/login" 
-                  onClick={() => setIsOpen(false)} 
-                  className="flex items-center justify-center text-[15px] font-semibold bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2.5 rounded-full shadow-[0_8px_20px_rgba(16,185,129,0.25)] transition-all"
-                >
-                  Registrarse
                 </Link>
               </div>
             )}
