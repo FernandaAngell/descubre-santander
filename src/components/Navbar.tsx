@@ -253,12 +253,31 @@ export default function Navbar() {
           <div className="border-t border-white/10 pt-4 flex flex-col gap-2">
             {session ? (
               <>
-                <Link 
-  href="/favoritos" 
-  onClick={() => setIsOpen(false)} 
-  className="flex items-center gap-3 text-[15px] font-medium text-white hover:text-emerald-400 hover:bg-white/5 px-3 py-2.5 rounded-xl transition-all"
+                <Link
+  href="/favoritos"
+  onClick={() => setShowUserMenu(false)}
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    padding: "10px 12px",
+    borderRadius: "12px",
+    color: "#ffffff",
+    fontSize: "13px",
+    fontWeight: 500,
+    textDecoration: "none",
+    transition: "all .2s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.background = "rgba(255,255,255,.05)"
+    e.currentTarget.style.color = "#6ee7b7"
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.background = "transparent"
+    e.currentTarget.style.color = "#ffffff"
+  }}
 >
-  <Heart size={16} className="text-red-400" />
+  <Heart size={14} color="#f87171" />
   Mis favoritos
 </Link>
                 
