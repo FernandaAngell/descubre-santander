@@ -68,14 +68,26 @@ export default function Navbar() {
           {/* Links — Centro absoluto (Solo Desktop) */}
           <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-semibold text-white hover:text-white/80 transition-colors duration-200"
-              >
-                {link.label}
-              </Link>
-            ))}
+  <Link
+    key={link.href}
+    href={link.href}
+    style={{
+      color: "#ffffff",
+      fontSize: "14px",
+      fontWeight: 600,
+      textDecoration: "none",
+      transition: "color .2s ease",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.color = "#6ee7b7"
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.color = "#ffffff"
+    }}
+  >
+    {link.label}
+  </Link>
+))}
           </div>
 
           {/* Botones/Usuario — Derecha (Solo Desktop) */}
