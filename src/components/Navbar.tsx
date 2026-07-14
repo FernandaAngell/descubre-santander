@@ -68,26 +68,26 @@ export default function Navbar() {
           {/* Links — Centro absoluto (Solo Desktop) */}
           <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                style={{
-                  color: "#ffffff",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  textDecoration: "none",
-                  transition: "color .2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#6ee7b7"
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "#ffffff"
-                }}
-              >
-                {link.label}
-              </Link>
-            ))}
+  <Link
+    key={link.href}
+    href={link.href}
+    style={{
+      color: "#ffffff",
+      fontSize: "14px",
+      fontWeight: 600,
+      textDecoration: "none",
+      transition: "color .2s ease",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.color = "#6ee7b7"
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.color = "#ffffff"
+    }}
+  >
+    {link.label}
+  </Link>
+))}
           </div>
 
           {/* Botones/Usuario — Derecha (Solo Desktop) */}
@@ -209,90 +209,46 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Enlaces de Navegación principales y "Mis favoritos" */}
+          {/* Enlaces de Navegación principales */}
           <div className="flex flex-col gap-1">
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                style={{
-                  color: "#ffffff",
-                  fontSize: "15px",
-                  fontWeight: 600,
-                  textDecoration: "none",
-                  padding: "10px 12px",
-                  borderRadius: "12px",
-                  transition: "color .2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#6ee7b7"
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "#ffffff"
-                }}
-              >
-                {link.label}
-              </Link>
-            ))}
-
-            {/* Ubicación de "Mis favoritos" con el mismo estilo y comportamiento que los links de la web */}
-            {session && (
-              <Link
-                href="/favoritos"
-                onClick={() => setIsOpen(false)}
-                style={{
-                  color: "#ffffff",
-                  fontSize: "15px",
-                  fontWeight: 600,
-                  textDecoration: "none",
-                  padding: "10px 12px",
-                  borderRadius: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  transition: "color .2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#6ee7b7"
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "#ffffff"
-                }}
-              >
-                <Heart size={16} className="text-red-400" />
-                Mis favoritos
-              </Link>
-            )}
+  <Link
+    key={link.href}
+    href={link.href}
+    onClick={() => setIsOpen(false)}
+    style={{
+      color: "#ffffff",
+      fontSize: "15px",
+      fontWeight: 500,
+      textDecoration: "none",
+      padding: "10px 12px",
+      borderRadius: "12px",
+    }}
+  >
+    {link.label}
+  </Link>
+))}
           </div>
 
           {/* Acciones adicionales del usuario / Autenticación */}
           <div className="border-t border-white/10 pt-4 flex flex-col gap-2">
             {session ? (
               <>
+                <Link 
+  href="/favoritos" 
+  onClick={() => setIsOpen(false)} 
+  className="flex items-center gap-3 text-[15px] font-medium text-white hover:text-emerald-400 hover:bg-white/5 px-3 py-2.5 rounded-xl transition-all"
+>
+  <Heart size={16} className="text-red-400" />
+  Mis favoritos
+</Link>
+                
                 {/* Panel de administrador en menú móvil */}
                 {session.user?.role === "ADMIN" && (
                   <Link 
                     href="/admin" 
                     onClick={() => setIsOpen(false)} 
-                    style={{
-                      color: "#ffffff",
-                      fontSize: "15px",
-                      fontWeight: 600,
-                      textDecoration: "none",
-                      padding: "10px 12px",
-                      borderRadius: "12px",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      transition: "color .2s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = "#6ee7b7"
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = "#ffffff"
-                    }}
+                    className="flex items-center gap-3 text-[15px] font-medium text-white/70 hover:text-white hover:bg-white/5 px-3 py-2.5 rounded-xl transition-all"
                   >
                     <Settings size={16} className="text-white/40" />
                     Panel admin
@@ -304,28 +260,7 @@ export default function Navbar() {
                     setIsOpen(false)
                     signOut({ callbackUrl: "/" })
                   }} 
-                  style={{
-                    color: "#f87171",
-                    fontSize: "15px",
-                    fontWeight: 600,
-                    padding: "10px 12px",
-                    borderRadius: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    transition: "background-color .2s ease",
-                    background: "none",
-                    border: "none",
-                    width: "100%",
-                    textAlign: "left",
-                    cursor: "pointer",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.05)"
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent"
-                  }}
+                  className="flex items-center gap-3 text-[15px] font-semibold text-red-400 hover:bg-red-500/10 px-3 py-2.5 rounded-xl transition-all text-left w-full cursor-pointer mt-2"
                 >
                   <LogOut size={16} />
                   Cerrar sesión
@@ -334,12 +269,12 @@ export default function Navbar() {
             ) : (
               <div className="flex flex-col gap-3 mt-1">
                 <Link
-                  href="/auth/login"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[15px] font-semibold px-5 py-3 rounded-full transition-all duration-300 shadow-[0_8px_20px_rgba(16,185,129,0.2)] hover:shadow-[0_8px_20px_rgba(16,185,129,0.35)]"
-                >
-                  Iniciar sesión
-                </Link>
+  href="/auth/login"
+  onClick={() => setIsOpen(false)}
+  className="flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-[15px] font-semibold px-5 py-3 rounded-full transition-all duration-300 shadow-[0_8px_20px_rgba(16,185,129,0.2)] hover:shadow-[0_8px_20px_rgba(16,185,129,0.35)]"
+>
+  Iniciar sesión
+</Link>
               </div>
             )}
           </div>
